@@ -1,4 +1,92 @@
-# Network-Protocol-Study   
+# Network-Study   
+
+# 패킷 지연과 손실
+## 패킷 지연의 유형
+ 1) 전송 지연(transmission delay / store-and-forward delay)   
+   ① 패킷의 모든 비트들을 링크로 밀어내는(전송)데 필요한 시간   
+   ② 저장 후 전달 지연   
+   ③ 전송 지연 = L(packet length, bits) / R(link bandwidth, bps)   
+	    출력 링크의 Bandwidth가 R bps (1초 당 R bits)로 전송한다.   
+    	이 때 한 패킷의 길이가 L bits라면 출력 링크에 전송하는데에 L/R 초 만큼 시간이 소요된다.   
+ 2) 전파 지연(propagation delay)   
+   ① 출력 링크에서 다음 라우터까지 전파하는데 필요한 시간   
+   ② 전파 속도는 링크의 물리 매체(광섬유, 꼬임쌍선 등)에 좌우   
+   ③ 전파 지연 = d(두 라우터 간의 거리) / s(매체의 전파 속도(2*10^8 m/sec ~ 3*10^8 m/sec)   
+ 3) 노드 처리 지연(nodal processing delay)   
+   ① 라우터에서의 처리 지연   
+   ② 패킷의 헤더를 조사하고 어느 출력 링크로 보낼 지 결정하는 시간   
+   ③ 패킷의 비트 수준 오류를 조사하는데 필요한 시간   
+   ④ 고속 라우터에서 처리 지연은 수 밀리초   
+ 4) 큐잉 지연(queuing delay)   
+   ① 패킷이 큐에서 출력 링크로 전송되기를 기다리는 시간   
+   ② 라우터 혼잡 수준(congestion level)에 좌우(이미 큐에 저장된 패킷들 수에 의해 결정)   
+   ③ 일반적으로 수 밀리초에서 수 마이크로초   
+
+# Packet switching & Circuit switching
+
+## Packet switching
+- 네트워크 자원을 패킷 단위로 나누어 시간을 공유하므로 회선 효율성이 높다.   
+- 트래픽이 많으면 Circuit switching은 네트워크 부하가 감소할 때까지 요청을 차단하나, Packet switching은 Store-and-Forward 방식을 사용하기 때문에 데이터가 들어오는 속도와 나가는 속도를 맞출 필요 없이 각 스테이션에 맞도록 속도를 조절할 수 있다. 이로써 전송 지연이 줄어들고 통신 안정성이 늘어난다.
+- 가상 회선 방식: 관련된 패킷을 전부 같은 경로를 통해 전송하는 방법이다. 가상 번호를 기반으로 가상 회선을 구현한다. Call Setup 이 필요하다. 가상 회선의 Call Setup 은 라우팅 테이블에 등록하는 과정이다.
+## Circuit switching
+### Circuit Switching 개념
+하나의 케이블을 여러 개의 Circuit으로 나눠놓는 것. 목적지에 따라 사용할 Circuit을 예약해놓음.
+## Packet switching과 Circuit switching의 차이점
+- Circuit Switching은 자원을 나누어서 전용으로 사용(No Sharing).    
+  데이터를 끊임없이 전송하는 Streaming Data의 경우에는 괜찮지만 Burst(데이터를 가끔 전송)한 경우에 회선이 노는 경우가 많다.
+- Burst한 데이터 전송의 경우에는 Packet Switching이 더 유리하다.
+  그 이유는 Packet Switching은 나누어서 예약하여 사용하는 방식이 아니라 하나의 자원을 공유하여 사용하기 때문이다. 
+  다른 데이터를 전송할 때도 이용할 수 있기 때문에 Circuit보다는 더 효율적으로 전송할 수 있다.
+
+## 패킷 손실이 일어나는 경우
+- 앞에서 큐(버퍼)가 무한대 패킷을 저장한다고 가정   
+- 실제는 라우터 큐 용량이 유한하고, 큐가 차게되어 도착한 패킷을 저장할 수 없으면 패킷을 버리게 되어(drop), 패킷을 잃어버림(lost)   
+- 잃어 버린 패킷은 이전 노드나 출발지 종단에서 재전송 될 수 있음(2계층에서 확인하고 다시 보내도록 함.)   
+
+# OSI 7계층 & TCP/IP 4계층
+## OSI 7계층
+1. 응용계층 A pplication Layer
+   - 응용 서비스를 지원
+   - 사용자의 인터페이스를 제공
+
+2. 표현계층 P 
+   - 데이터의 부호화/복호화
+   - 데이터의 암호화/복호화
+   - 데이터 압축 방법
+
+3. 세션계층 S ession Layer
+   - 송신 단과 수신 단 사이의 세션 채널을 규정
+   - 대화 채널
+
+4. 전송계층 T ransport Layer
+   - End-to-End 간의 전송 제어 방법을 규정
+   - 연결형 서비스 및 비 연결형 서비스 제공
+   - 메시지의 분할 및 재조립
+   - 연결형의 경우 End-to-End 간의 흐름 제어, 오류 제어 기능 수행
+   - 데이터 구조: 세그먼트(Segment)
+
+5. 네트워크 계층 N etwork Layer
+   - 수신 측 주소(번호)를 가지고 경로 설정
+   - 송신 측에서 패킷 구성, 수신 측에서 패킷 분해
+   - 송신과 수신측에서 논리적 주소의 설정 (IP주소)
+   - 트래픽 제어
+   - 네트워크 보안
+   - 데이터 구조: 패킷 (데이터그램)
+
+6. 데이터 링크 계층 D ata-link Layer
+   - 링크 상에서의 프레임 구조, 오류 제어, 흐름 제어, 동기화 등을 규정
+   - Error Correction Layer (에러 검출 및 Correction)
+   - Broadcast 채널을 공유: Multiple access (여러 기기가 Access Point를 공유)
+   - MAC(Multiple Access Control) Layer
+   - Link Layer 어드레싱
+   - Local area networks: Ethernet, VLANS
+   - 브리지(네트워크 세그먼트 간의 연결)
+   - 스위치(PC, 스위치, AP를 연결)
+   - 데이터 구조: 프레임
+
+7. 물리 계층 P hysical Layer
+
+## TCP/IP 4계층
 
 # 데이터 링크 계층의 기능
 - 데이터 링크 제어:   
