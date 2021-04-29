@@ -23,7 +23,6 @@
    ③ 일반적으로 수 밀리초에서 수 마이크로초   
 
 # Packet switching & Circuit switching
-
 ## Packet switching
 - 네트워크 자원을 패킷 단위로 나누어 시간을 공유하므로 회선 효율성이 높다.   
 - 트래픽이 많으면 Circuit switching은 네트워크 부하가 감소할 때까지 요청을 차단하나, Packet switching은 Store-and-Forward 방식을 사용하기 때문에 데이터가 들어오는 속도와 나가는 속도를 맞출 필요 없이 각 스테이션에 맞도록 속도를 조절할 수 있다. 이로써 전송 지연이 줄어들고 통신 안정성이 늘어난다.
@@ -44,7 +43,7 @@
 - 잃어 버린 패킷은 이전 노드나 출발지 종단에서 재전송 될 수 있음(2계층에서 확인하고 다시 보내도록 함.)   
 
 # OSI 7계층 & TCP/IP 4계층
-## OSI 7계층
+## OSI 7계층 (A-Penguin-Said-That-Nobody-Drinks-Pepsi)
 1. 응용계층 A pplication Layer
    - 응용 서비스를 지원
    - 사용자의 인터페이스를 제공
@@ -83,10 +82,36 @@
    - 브리지(네트워크 세그먼트 간의 연결)
    - 스위치(PC, 스위치, AP를 연결)
    - 데이터 구조: 프레임
+   - 두가지 핵심 Sub-layer: MAC layer, Error correction layer
 
 7. 물리 계층 P hysical Layer
 
 ## TCP/IP 4계층
+1. 응용 계층 Application Layer 
+	- 통신 단위: 메시지
+	- TCP: HTTP, FTP, TELNET, SMTP
+	- UDP: DNS, TFTP, SNMP
+
+2. 전송 계층 Transport Layer
+	- End-to-End 간의 전송 제어 방법
+	- TCP, UDP
+	- 통신 단위: TCP 세그먼트 또는 UDP 데이터그램
+	- 서비스 포트
+
+3. 네트워크 계층 Internet Layer
+	- 목적지 IP 번호를 가지고 경로 설정
+	- IP 주소 지정
+	- 데이터구조: 패킷
+	- 통신 단위: 데이터그램 ( = 패킷)
+	- 프로토콜: IP, ICMP, ARP, RARP, RIP, OSPF, IGMP
+	- 라우터
+	- 경로 설정 기능 
+
+4. 네트워크 액세스 계층 Network Access Layer
+	- OSI 7 Layer: 물리계층, 데이터 링크 계층
+	- 통신 단위: 프레임
+	- MAC 주소의 지정
+	- 허브, 중계기, 스위치, 브리지
 
 # 데이터 링크 계층의 기능
 - 데이터 링크 제어:   
@@ -128,7 +153,18 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
  Maximum throughput = 0.368 for G=1
  ~~~
 - CSMA   
-- CSMA/CD   
+- CSMA/CD: CSMA/CD는 일단 충돌을 감지하고 충돌이 나면 다시 전송하는 방식.   
+- CSMA/CA: CSMA/CA는 사전에 최대한 충돌을 회피하려는 방식.
+### CSMA/CD
+1. NIC(Network Interface Card)는 3계층인 Network Layer로부터 datagram을 수신하여 Frame을 만든다.
+2. NIC는 먼저 CSMA를 수행한다. 채널을 대상으로 Carrier Sense를 한다. 만약 Carrier가 Sense되었으면(채널이 바쁘면) 채널이 사용되고 있지 않을 때까지 계속 기다렸다가 전송한다.
+3. 다음으로 CD(Collision Detection)을 수행한다. 케이블에 다른 신호가 없으면 전송 성공.
+4. CD를 수행하여 전송 중에 충돌이 인식되었다면 jam signal을 전송하여 전송을 무효화(중단) 한다.
+5. 전송 중단을 마친 후, NIC는 binary(exponential) backoff를 수행한다.
+	- 충돌이 많을수록 충돌을 줄이기 위해 대기시간의 선택지를 늘린다.
+	- m번째 충돌 후 다음 전송까지 대기시간 선택지: {0, 1, 2, . . . , -1}
+	- 위처럼 충돌횟수에 따라 기하급수적으로 선택지가 늘어난다.
+	- NIC가 위의 선택지에서 랜덤하게 선택한 숫자를 K라 했을 때, 512bit * K 만큼 기다린다.
 ## Controlled Access   
 - Reservation   
 - Polling   
