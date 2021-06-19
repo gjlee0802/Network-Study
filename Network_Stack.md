@@ -76,16 +76,17 @@ IPsec는 전송 모드(transport mode)와 터널 모드(tunnel mode)라는 두 �
 ttl은 포워딩 장치마다 1씩 감소한다. ttl이 0이 되면 버려지고 "TTL Count Exceeded" 코드가 포함된 "Time Exceeded"라는 ICMPv4 메시지가 반환된다.   
 이것은 어떤 오류 때문에 패킷이 끝없이 포워딩되는 것을 방지한다(Loop 경로 방지).   
 패킷이 성공적으로 포워딩되고 ttl이 1 감소할 때마다 헤더의 체크섬을 다시 계산해야 하는데, 체크섬은 IPv4 헤더에 따라 달라지고 ttl은 IPv4 헤더의 일부이기 때문이다.   
-   
+
+-------------------------------------------------
 패킷의 이동을 더 잘 이해하려면 리눅스 커널에서 패킷이 어떻게 표현되는지 알아야 한다.   
 sk_buff 구조체는 헤더[(include/linux/skbuff.h)](https://github.com/torvalds/linux/blob/master/include/linux/skbuff.h#L717)를 포함해서 유입/유출 패킷을 나타낸다.   
 sk_buff 객체를 흔히 SKB로 표기한다(socket buffer을 나타낸다).   
 sk_buff 구조체는 매우 큰 구조체이므로 우선 이 구조체의 몇 항목만 살펴본다.   
 
 ### 1.1.4 소켓 버퍼
-참고 : https://hand-over.tistory.com/2
-SKB를 이용할 때는 다음과 같은 SKB API를 준수해야 한다.   
-가령 skb->data 포인터에 접근하고 싶을 경우 직접 접근하지 않고 skb_pull_inline() 혹은 skb_pull() 함수를 이용한다.   
+> 참고 : https://hand-over.tistory.com/2   
+SKB(sk_buff)를 이용할 때는 다음과 같은 SKB API를 준수해야 한다.   
+가령 `skb->data` 포인터에 접근하고 싶을 경우 직접 접근하지 않고 `skb_pull_inline()` 혹은 `skb_pull()` 함수를 이용한다.   
 
 - alloc_skb(size)
 - skb_reserve(len)
@@ -95,7 +96,19 @@ SKB를 이용할 때는 다음과 같은 SKB API를 준수해야 한다.
 - skb_transport_header(skb) : SKB에서 L4 헤더(Transport HDR)을 가져온다.
 - skb_network_header(skb) : SKB에서 L3 헤더(Network HDR)을 가져온다.
 - skb_mac_header(skb) : SKB에서 L2 헤더(MAC HDR)을 가져온다.   
+--------------------------------------------
+패킷이 회선에서 수신되면 네트워크 디바이스 드라이버에 의해 SKB가 할당되며, 일반적으로 `netdev_alloc_skb()` 함수를 호출해 할당된다.   
+패킷이 이동하는 과정에서 버려지는 경우에는 `kfree_skb()` 또는 `dev_kfree_skb()` 함수를 호출하여 이루어진다.   
+SKB의 일부 항목은 링크 계층(L2)에서 결정된다. 예를 들어, `pkt_type`은 목적지 이더넷 주소에 따라 `eth_type_trans()` 함수에 의해 정해진다.
+이 주소가 멀티캐스트 주소면 `pkt_type`은 `PACKET_MULTICAST`로 설정되고, 브로드캐스트 주소면 `PACKET_BROADCAST`로 설정되며, 로컬 호스트 주소면 `PACKET_HOST`로 설정된다.   
+`eth_type_trans()` 함수에서 이더넷 헤더의 `ethertype`에 따라 SKB의 `protocol` 필드를 설정한다.   
+`eth_type_trans()` 함수에서 14 바이트(ETH_HLEN)만큼 SKB의 data 포인터를 이동시킨다. 이렇게 포인터를 이동시키는 이유는 `skb->data`가 현재 상주하는 계층의 헤더를 가리키도록 하기 위함이다.   
+패킷이 네트워크 디바이스 드라이버의 Rx 경로인 L2에 있다면 `skb->data`는 L2(이더넷) 헤더를 가리킨다. 
+이제 패킷은 `eth_type_trans()` 호출 즉시 3계층으로 이동하고 `skb->data`는 L3(네트워크) 헤더를 가리킨다.   
+![IPv4_Packet](https://user-images.githubusercontent.com/49184890/122650256-c4998280-d16c-11eb-8027-e3ab36fae79a.png)   
+위 그림은 TCP/UDP Payload를 제외한 패킷의 구조다.   
+> IPv4 패킷구조 참고 : https://hack-cracker.tistory.com/112   
 
-## 리눅스 커널 네트워킹 개발 모델
+## 1.2 리눅스 커널 네트워킹 개발 모델
 
 # 2. 넷링크 소켓
