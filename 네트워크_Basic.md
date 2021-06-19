@@ -175,18 +175,163 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - CDMA   
 
 # ARP (Address Resolution Protocol)
-IP 주소를 물리적 네트워크 주소로 대응시키기 위해 사용되는 프로토콜
- 
-# Ethernet 
+**IP 주소를 물리적 네트워크 주소로 대응시키기 위해 사용되는 프로토콜이다.**
+
+- One-Hop으로 이루어진 내부 네트워크(Local Area Network)에서만 작동하는 프로토콜이다.   
+- ARP Query를 전송하여 Destination IP에 해당하는 MAC주소를 찾음.   
+- ARP Query는 Target MAC주소에 FF-FF-FF-FF-FF-FF를 입력하여 전송한다. (모든 MAC주소가 수신.)   
+- 수신하는 호스트는 ARP Query 메시지에 있는 Destination IP가 자신의 IP와 일치하면 Source에 자신의 MAC주소를 입력하여 ARP Query에 응답한다.   
+- 각각의 호스트는 응답받은 MAC주소를 ARP Table에 기억한다. <IP 주소; MAC 주소; TTL>   
+- TTL(Time To Live)은 주소 매핑을 잊어버리기 까지의 시간이다. (일반적으로 20분)   
+## (ARP protocol: same LAN)
+
+- A가 datagram을 B에게 보내고 싶을 때, A의 ARP table에 B의 MAC주소가 없다면,   
+- A는 ARP query 패킷에 목적지 IP 주소로 B의 IP 주소를 넣어 Broadcast 한다.   
+  (Dest MAC 주소는 FF-FF-FF-FF-FF-FF)   
+- B는 ARP 패킷을 수신하고 B의 MAC주소를 담아 A에게 답장한다. (Unicast로 응답.)   
+- ARP는 “plug and play”이다. ARP 프로토콜은 자동적으로 실행되어 ARP Table이 갱신된다.   
+
+## (Addressing: routing to another LAN, 외부 네트워크의 장치에 송신의 경우)
+
+- B가 외부의 네트워크(라우터를 통과해야하는 네트워크)에 있는 경우에는 B의 MAC 주소를 알 필요가 없다.   
+- IP의 네트워크 주소가 일치하지 않으면 외부 네트워크의 IP이므로 게이트웨이(라우터)에 전달된다.   
+- 2계층은 One-hop의 Peer-to-Peer에만 신경쓰기 때문에 외부로 향하는 라우터의 MAC주소를 Dest MAC 주소로 한다.   
+
+# Ethernet (1L&2L : Physical Layer&Data-link Layer)
 
 ## 이더넷 특징
 - OSI 모델의 **물리 계층**에서 신호와 배선, 데이터 링크 계층에서 MAC(media access control) 패킷과 프로토콜의 형식을 정의한다.    
 - 이더넷 기술은 대부분 **IEEE 802.3 규약**으로 표준화되었다.   
 - 네트워크에 연결된 각 기기들이 **48비트**의 고유의 **MAC 주소**를 가지고 이 주소를 이용해 상호간에 데이터를 주고 받을 수 있도록 만들어졌다.   
-- **CSMA/CD**라는 multiple access protocol을 이용하여 통신한다.
+- **CSMA/CD**라는 multiple access protocol을 이용하여 통신한다.   
 
+# Network Layer (3L)
+## IPv4 주소체계
+- IP 주소: 32비트의 이진수   
+- 사용 가능한 IP주소 개수는 2의 32승 개다.   
+- IP주소는 네트워크 주소(네트워크 ID)와 호스트 주소(호스트 ID)로 구성된다.   
 
-## TCP/IP Protocol   
+### IP주소의 클래스 구분법
+- IP 주소의 앞부분 4비트로 클래스를 식별한다.   
+- 0이면 A 클래스, 10이면 B 클래스, 110이면 C 클래스.   
+- 클래스 식별의 이유: IP에서 네트워크 주소가 어디까지인지 구분하기 위함.   
+
+A 클래스: 0........... 첫 번째 바이트까지 네트워크 ID, 나머지 호스트 ID.   
+B 클래스: 10......... 두 번째 바이트까지 네트워크 ID, 나머지 호스트 ID.   
+C 클래스: 110...... 세 번째 바이트까지 네트워크 ID, 네 번째 바이트는 호스트 ID.   
+D 클래스: 1110... 멀티캐스트 주소   
+E 클래스: 1111.... 차후 사용을 위해 예약됨.   
+
+규모가 큰 네트워크일수록 A 클래스에 가까운 IP를 받는다.   
+또는 C 클래스 주소를 여러개 받는다.   
+
+호스트 ID의 자리에 모든 비트가 0이면 특정 호스트가 아니라 네트워크 자체를 의미한다.   
+호스트 ID의 자리에 모든 비트가 1이면 내부의 모든 호스트를 의미한다.   
+
+### A 클래스
+앞의 첫 번째 바이트(8비트)가 네트워크 ID를 나타낸다.   
+네트워크 주소의 범위는 0~127.   
+각 네트워크에서 호스트에 할당 가능한 주소의 개수는 ((2^24) – 2) 개.   
+(-2는 호스트 ID가 전부 0비트이거나 1비트인 것.)   
+전체 IP주소의 50%를 차지한다. (첫 번째 비트가 0으로 시작하는 주소는 A 클래스이기 때문. 나머지는 0으로 시작)   
+A 클래스의 네트워크 ID는 전세계에서 128개 기관만 가질 수 있다.   
+
+### B 클래스
+네트워크 주소의 범위는 128.0 ~ 191.255   
+전체 IP주소의 25%를 차지한다.   
+각 네트워크에서 호스트에 할당 가능한 주소의 개수는 ((2^16) –2)개   
+
+### C 클래스
+전체 IP주소의 12.5%를 차지한다.   
+
+### 서브넷
+- 서브넷 개념 정의: 하나의 IP 네트워크 주소(A Class 혹은 B Class의 주소)를 네트워크 내부에서 적절히 분배하여 실제로는 여러개의 서로 연결된 지역 네트워크로 사용하는 것.   
+- 필요성: 하나의 네트워크로 수많은 호스트들을 한꺼번에 관리하기는 힘들기 때문에 필요.   
+
+### 서브넷 마스크
+
+클래스에 대한 표준 네트워크 마스크는 아래와 같다.   
+Class A: 255.0.0.0 (11111111 00000000 00000000 00000000)   
+Class B: 255.255.0.0 (11111111 11111111 00000000 00000000)   
+Class C: 255.255.255.0 (11111111 11111111 11111111 00000000)   
+   
+#### Class C의 주소에서 서브넷 마스크를 255.255.255.224로 설정했을 경우.   
+255.255.255.224 ( = 11111111 11111111 11111111 11100000)   
+앞의 255는 2진수로 110..이므로 Class C이다.   
+Class C는 앞의 3바이트로 네트워크ID를 식별하여 라우팅하고   
+마지막 바이트 앞의 3비트로 서브넷을 구분한다.   
+마지막 바이트의 3비트를 마스킹하는 것은 네트워크 내부의 서브넷을 최대 8개 사용한다는 의미.   
+
+### 사설 주소
+- IP 주소 중 인터넷에서 사용하지 않는 주소.   
+- IP 주소 부족을 해결하는 방안.   
+
+Class A: 10.0.0.0 ~ 10.255.255.255   
+Class B: 172.16.0.0 ~ 172.31.255.255   
+Class C: 192.168.0.0 ~ 192.168.255.255   
+
+### data plane과 control plane 개념
+
+## Network layer의 역할
+
+- Segment를 호스트에게 전송(Segment에 추가 데이터를 붙여서 Packet으로 전송).   
+- 전송부에서는 segment들을 datagram(혹은 Packet)으로 담아서 전송한다.   
+- 수신부에서는 Segment부분을 Transport layer로 올려줌.   
+- Network layer 프로토콜은 모든 호스트와 라우터에 구현된다.   
+- 라우터는 IP 패킷(datagram)의 헤더를 보고 어느 경로로 보낼지 결정한다.   
+
+## Network layer의 두가지 핵심 기능
+
+- **forwarding**: 라우터에서 다음 라우터에게 패킷을 전달해주는 것.   
+- **routing**: 최적의 경로를 찾는 것.   
+
+패킷 헤더의 dest IP주소를 보고 routing algorithm을 통해 업데이트한 local forwarding table에서   
+적절한 출력링크를 찾아 전송한다.   
+
+## Network layer service models
+
+3계층의 Service Model은 Best-effort 방식이다(제대로 전송하려고 최선을 다할 뿐 보장은 하지 않는다). -> 신뢰성을 보장하는 것은 4계층에서 한다.   
+3계층에는 Connection이 필요하지 않다(Connection-less service).   
+
+## Longest prefix matching
+IP 주소 앞 부분이 가장 길게 일치하는 항목을 찾는 방법.   
+
+## The Internet network layer 구성요소
+- routing protocol (path selection; RIP OSPF, BGP)   
+- forwarding table   
+- IP protocol   
+- ICMP(Internet Control Message) protocol  (error reporting; router signaling)   
+
+## IP datagram format
+
+![image00002](https://user-images.githubusercontent.com/49184890/122635657-34cde700-d120-11eb-9273-542d510c62f2.PNG)   
+
+- IP datagram의 헤더는 총 20Bytes이다.   
+- “20Bytes의 IP헤더 + 20Bytes TCP헤더 + app layer overhead” 로 구성된다.   
+- TTL: 최대 통과 가능한 Hop의 개수에 제한을 걺 (무한루프 방지).   
+- Upper layer: segment가 TCP인지 UDP인지 결정. 네트워크 계층의 제어를 위한 ICMP 정보가 들어있을 수 있다.   
+- HDR Checksum: 20바이트인 헤더를 2바이트씩 쪼개어 더하고 1의 보수를 취한 값이다. 라우터를 통과하면서 업데이트된다 (TTL이 계속 감소하여 헤더 값이 바뀐다).    
+- IP address: IPv4는 32bits, IPv6는 128bits이다.   
+
+### (IP fragmentation : IP 단편화, reassembly)
+
+- 위의 IP datagram format에서 헤더 부분의 { 16-bit ID | flags | fragment offset } 부분이 단편화와 관련있다.   
+- 링크의 종류가 다르면 최대 보낼 수 있는 패킷의 크기도 다르기 때문에 패킷을 쪼개어 보내야 한다.   
+- 수신하게 되는 host는 쪼개어 온 패킷들을 다시 합친다(중간의 라우터들은 합치지 않는다).   
+- MTU(Maximum Transfer Unit): 2계층 Frame의 Payload (즉, IP datagram)의 크기를 지칭.   
+
+### 예를 들어, 4000 Bytes dtagram을 보내야하는데 MTU가 1500 Bytes이면 3개의 datagram들로 나누어 전송.   
+- ID는 모두 같은 값.   
+- fragment flag가 1이면 뒤에 더 이어질 데이터가 있다는 의미이다(마지막 패킷은 0).    
+- offset은 합칠 패킷의 순서를 알기 위한 값이다(8 Bytes단위로 끊음).    
+- length는 헤더(20 Bytes)를 포함한 크기이므로 실제 segment의 크기는 length – 20 Bytes이다.   
+
+## IP addressing
+### (IP addressing: CIDR)
+### (IP addresses: how to get one?)
+
+# Transport Layer (4L)
+## TCP/IP Protocol
 https://tldp.org/LDP/tlk/net/net.html    
 
 TCP/IP Frame Structure    
