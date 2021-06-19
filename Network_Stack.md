@@ -85,6 +85,8 @@ sk_buff 구조체는 매우 큰 구조체이므로 우선 이 구조체의 몇 �
 
 ### 1.1.4 소켓 버퍼
 > 참고 : https://hand-over.tistory.com/2   
+> https://www.kernel.org/doc/html/latest/networking/kapi.html?highlight=sk_buff#c.sk_buff   
+
 SKB(sk_buff)를 이용할 때는 다음과 같은 SKB API를 준수해야 한다.   
 가령 `skb->data` 포인터에 접근하고 싶을 경우 직접 접근하지 않고 `skb_pull_inline()` 혹은 `skb_pull()` 함수를 이용한다.   
 
