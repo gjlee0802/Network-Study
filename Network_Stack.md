@@ -110,6 +110,8 @@ SKB의 일부 항목은 링크 계층(L2)에서 결정된다. 예를 들어, `pk
 ![IPv4_Packet](https://user-images.githubusercontent.com/49184890/122650256-c4998280-d16c-11eb-8027-e3ab36fae79a.png)   
 위 그림은 TCP/UDP Payload를 제외한 패킷의 구조다.   
 > IPv4 패킷구조 참고 : https://hack-cracker.tistory.com/112   
+SKB는 패킷 헤더(L2,L3,L4 헤더)와 패킷 페이로드를 포함한다. 네트워크 스택 내에서 패킷이 이동하면서 헤더가 추가되거나 제거된다. 
+> 예를 들어, 소켓에 의해 로컬에서 생성되어 바깥으로 전송되는 IPv4 패킷에 대해 L4(Transport Layer)
 
 ## 1.2 리눅스 커널 네트워킹 개발 모델
 
