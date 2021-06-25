@@ -44,27 +44,27 @@
 
 # 3. OSI 7계층 & TCP/IP 4계층
 ## 3.1 OSI 7계층 (A-Penguin-Said-That-Nobody-Drinks-Pepsi)
-1. 응용계층 A pplication Layer
+1. 응용계층 **A** pplication Layer
    - 응용 서비스를 지원
    - 사용자의 인터페이스를 제공
 
-2. 표현계층 P 
+2. 표현계층 **P** resentation layer
    - 데이터의 부호화/복호화
    - 데이터의 암호화/복호화
    - 데이터 압축 방법
 
-3. 세션계층 S ession Layer
+3. 세션계층 **S** ession Layer
    - 송신 단과 수신 단 사이의 세션 채널을 규정
    - 대화 채널
 
-4. 전송계층 T ransport Layer
+4. 전송계층 **T** ransport Layer
    - End-to-End 간의 전송 제어 방법을 규정
    - 연결형 서비스 및 비 연결형 서비스 제공
    - 메시지의 분할 및 재조립
    - 연결형의 경우 End-to-End 간의 흐름 제어, 오류 제어 기능 수행
    - 데이터 구조: 세그먼트(Segment)
 
-5. 네트워크 계층 N etwork Layer
+5. 네트워크 계층 **N** etwork Layer
    - 수신 측 주소(번호)를 가지고 경로 설정
    - 송신 측에서 패킷 구성, 수신 측에서 패킷 분해
    - 송신과 수신측에서 논리적 주소의 설정 (IP주소)
@@ -72,7 +72,7 @@
    - 네트워크 보안
    - 데이터 구조: 패킷 (데이터그램)
 
-6. 데이터 링크 계층 D ata-link Layer
+6. 데이터 링크 계층 **D** ata-link Layer
    - 링크 상에서의 프레임 구조, 오류 제어, 흐름 제어, 동기화 등을 규정
    - Error Correction Layer (에러 검출 및 Correction)
    - Broadcast 채널을 공유: Multiple access (여러 기기가 Access Point를 공유)
@@ -84,7 +84,7 @@
    - 데이터 구조: 프레임
    - 두가지 핵심 Sub-layer: MAC layer, Error correction layer
 
-7. 물리 계층 P hysical Layer
+7. 물리 계층 **P** hysical Layer
 
 ## 3.2 TCP/IP 4계층
 1. 응용 계층 Application Layer 
