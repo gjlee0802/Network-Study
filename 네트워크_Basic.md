@@ -113,7 +113,8 @@
 	- MAC 주소의 지정
 	- 허브, 중계기, 스위치, 브리지
 
-# 데이터 링크 계층의 기능
+# Data-link Layer (2L)
+## 데이터 링크 계층의 기능
 - 데이터 링크 제어:   
  프레임, 오류 제어 및 흐름 제어와 같은 기술을 사용하여 전송 채널을 통해 메시지를 안정적으로 전송할 수 있습니다.   
  https://www.geeksforgeeks.org/stop-and-wait-arq/   
@@ -121,11 +122,11 @@
  전송과 수신 사이에 전용 링크가 있는 경우에는 데이터 링크 제어 계층으로 충분하지만, 전용 링크가 없는 경우에는 여러 스테이션이 동시에 채널에 액세스할 수 있습니다.    
  따라서 충돌을 줄이고 상호 토크를 피하기 위해 여러 액세스 프로토콜이 필요합니다.   
 
-# Multiple Access Protocols   
+## Multiple Access Protocols   
 https://www.geeksforgeeks.org/multiple-access-protocols-in-computer-network/   
 https://inyongs.tistory.com/79   
 
-## Random Access Protocol   
+### Random Access Protocol   
 모든 스테이션은 매체의 상태 (유휴 또는 사용 중)에 따라 데이터를 보냅니다.    
 다음 두 가지 특징이 있습니다.   
 1. 데이터 전송에 대한 고정 된 시간이 없습니다.
@@ -155,7 +156,7 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - CSMA   
 - CSMA/CD: CSMA/CD는 일단 충돌을 감지하고 충돌이 나면 다시 전송하는 방식.   
 - CSMA/CA: CSMA/CA는 사전에 최대한 충돌을 회피하려는 방식.
-### CSMA/CD
+#### CSMA/CD
 1. NIC(Network Interface Card)는 3계층인 Network Layer로부터 datagram을 수신하여 Frame을 만든다.
 2. NIC는 먼저 CSMA를 수행한다. 채널을 대상으로 Carrier Sense를 한다. 만약 Carrier가 Sense되었으면(채널이 바쁘면) 채널이 사용되고 있지 않을 때까지 계속 기다렸다가 전송한다.
 3. 다음으로 CD(Collision Detection)을 수행한다. 케이블에 다른 신호가 없으면 전송 성공.
@@ -165,16 +166,16 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 	- m번째 충돌 후 다음 전송까지 대기시간 선택지: {0, 1, 2, . . . , -1}
 	- 위처럼 충돌횟수에 따라 기하급수적으로 선택지가 늘어난다.
 	- NIC가 위의 선택지에서 랜덤하게 선택한 숫자를 K라 했을 때, 512bit * K 만큼 기다린다.
-## Controlled Access   
+### Controlled Access   
 - Reservation   
 - Polling   
 - Token Passing   
-## Channelization   
+### Channelization   
 - FDMA   
 - TDMA   
 - CDMA   
 
-# ARP (Address Resolution Protocol)
+## ARP (Address Resolution Protocol)
 **IP 주소를 물리적 네트워크 주소로 대응시키기 위해 사용되는 프로토콜이다.**
 
 - One-Hop으로 이루어진 내부 네트워크(Local Area Network)에서만 작동하는 프로토콜이다.   
@@ -183,7 +184,7 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - 수신하는 호스트는 ARP Query 메시지에 있는 Destination IP가 자신의 IP와 일치하면 Source에 자신의 MAC주소를 입력하여 ARP Query에 응답한다.   
 - 각각의 호스트는 응답받은 MAC주소를 ARP Table에 기억한다. <IP 주소; MAC 주소; TTL>   
 - TTL(Time To Live)은 주소 매핑을 잊어버리기 까지의 시간이다. (일반적으로 20분)   
-## (ARP protocol: same LAN)
+### (ARP protocol: same LAN)
 
 - A가 datagram을 B에게 보내고 싶을 때, A의 ARP table에 B의 MAC주소가 없다면,   
 - A는 ARP query 패킷에 목적지 IP 주소로 B의 IP 주소를 넣어 Broadcast 한다.   
@@ -191,7 +192,7 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - B는 ARP 패킷을 수신하고 B의 MAC주소를 담아 A에게 답장한다. (Unicast로 응답.)   
 - ARP는 “plug and play”이다. ARP 프로토콜은 자동적으로 실행되어 ARP Table이 갱신된다.   
 
-## (Addressing: routing to another LAN, 외부 네트워크의 장치에 송신의 경우)
+### (Addressing: routing to another LAN, 외부 네트워크의 장치에 송신의 경우)
 
 - B가 외부의 네트워크(라우터를 통과해야하는 네트워크)에 있는 경우에는 B의 MAC 주소를 알 필요가 없다.   
 - IP의 네트워크 주소가 일치하지 않으면 외부 네트워크의 IP이므로 게이트웨이(라우터)에 전달된다.   
@@ -200,7 +201,7 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 # Ethernet (1L&2L : Physical Layer&Data-link Layer)
 
 ## 이더넷 특징
-- OSI 모델의 **물리 계층**에서 신호와 배선, 데이터 링크 계층에서 MAC(media access control) 패킷과 프로토콜의 형식을 정의한다.    
+- OSI 모델의 **물리 계층**에서 신호와 배선, **데이터 링크 계층**에서 MAC(media access control) 패킷과 프로토콜의 형식을 정의한다.    
 - 이더넷 기술은 대부분 **IEEE 802.3 규약**으로 표준화되었다.   
 - 네트워크에 연결된 각 기기들이 **48비트**의 고유의 **MAC 주소**를 가지고 이 주소를 이용해 상호간에 데이터를 주고 받을 수 있도록 만들어졌다.   
 - **CSMA/CD**라는 multiple access protocol을 이용하여 통신한다.   
