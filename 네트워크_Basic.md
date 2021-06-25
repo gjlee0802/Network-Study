@@ -1,7 +1,7 @@
 # Network-Study   
 
-# 패킷 지연과 손실
-## 패킷 지연의 유형
+# 1. 패킷 지연과 손실
+## 1.1 패킷 지연의 유형
  1) 전송 지연(transmission delay / store-and-forward delay)   
    ① 패킷의 모든 비트들을 링크로 밀어내는(전송)데 필요한 시간   
    ② 저장 후 전달 지연   
@@ -22,15 +22,15 @@
    ② 라우터 혼잡 수준(congestion level)에 좌우(이미 큐에 저장된 패킷들 수에 의해 결정)   
    ③ 일반적으로 수 밀리초에서 수 마이크로초   
 
-# Packet switching & Circuit switching
-## Packet switching
+# 2. Packet switching & Circuit switching
+## 2.1 Packet switching
 - 네트워크 자원을 패킷 단위로 나누어 시간을 공유하므로 회선 효율성이 높다.   
 - 트래픽이 많으면 Circuit switching은 네트워크 부하가 감소할 때까지 요청을 차단하나, Packet switching은 Store-and-Forward 방식을 사용하기 때문에 데이터가 들어오는 속도와 나가는 속도를 맞출 필요 없이 각 스테이션에 맞도록 속도를 조절할 수 있다. 이로써 전송 지연이 줄어들고 통신 안정성이 늘어난다.
 - 가상 회선 방식: 관련된 패킷을 전부 같은 경로를 통해 전송하는 방법이다. 가상 번호를 기반으로 가상 회선을 구현한다. Call Setup 이 필요하다. 가상 회선의 Call Setup 은 라우팅 테이블에 등록하는 과정이다.
-## Circuit switching
+## 2.2 Circuit switching
 ### Circuit Switching 개념
 하나의 케이블을 여러 개의 Circuit으로 나눠놓는 것. 목적지에 따라 사용할 Circuit을 예약해놓음.
-## Packet switching과 Circuit switching의 차이점
+## 2.3 Packet switching과 Circuit switching의 차이점
 - Circuit Switching은 자원을 나누어서 전용으로 사용(No Sharing).    
   데이터를 끊임없이 전송하는 Streaming Data의 경우에는 괜찮지만 Burst(데이터를 가끔 전송)한 경우에 회선이 노는 경우가 많다.
 - Burst한 데이터 전송의 경우에는 Packet Switching이 더 유리하다.
@@ -42,8 +42,8 @@
 - 실제는 라우터 큐 용량이 유한하고, 큐가 차게되어 도착한 패킷을 저장할 수 없으면 패킷을 버리게 되어(drop), 패킷을 잃어버림(lost)   
 - 잃어 버린 패킷은 이전 노드나 출발지 종단에서 재전송 될 수 있음(2계층에서 확인하고 다시 보내도록 함.)   
 
-# OSI 7계층 & TCP/IP 4계층
-## OSI 7계층 (A-Penguin-Said-That-Nobody-Drinks-Pepsi)
+# 3. OSI 7계층 & TCP/IP 4계층
+## 3.1 OSI 7계층 (A-Penguin-Said-That-Nobody-Drinks-Pepsi)
 1. 응용계층 A pplication Layer
    - 응용 서비스를 지원
    - 사용자의 인터페이스를 제공
@@ -86,7 +86,7 @@
 
 7. 물리 계층 P hysical Layer
 
-## TCP/IP 4계층
+## 3.2 TCP/IP 4계층
 1. 응용 계층 Application Layer 
 	- 통신 단위: 메시지
 	- TCP: HTTP, FTP, TELNET, SMTP
@@ -113,8 +113,8 @@
 	- MAC 주소의 지정
 	- 허브, 중계기, 스위치, 브리지
 
-# Data-link Layer (2L)
-## 데이터 링크 계층의 기능
+# 4. Data-link Layer (2L)
+## 4.1 데이터 링크 계층의 기능
 - 데이터 링크 제어:   
  프레임, 오류 제어 및 흐름 제어와 같은 기술을 사용하여 전송 채널을 통해 메시지를 안정적으로 전송할 수 있습니다.   
  https://www.geeksforgeeks.org/stop-and-wait-arq/   
@@ -122,7 +122,7 @@
  전송과 수신 사이에 전용 링크가 있는 경우에는 데이터 링크 제어 계층으로 충분하지만, 전용 링크가 없는 경우에는 여러 스테이션이 동시에 채널에 액세스할 수 있습니다.    
  따라서 충돌을 줄이고 상호 토크를 피하기 위해 여러 액세스 프로토콜이 필요합니다.   
 
-## Multiple Access Protocols   
+## 4.2 Multiple Access Protocols   
 https://www.geeksforgeeks.org/multiple-access-protocols-in-computer-network/   
 https://inyongs.tistory.com/79   
 
@@ -175,7 +175,7 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - TDMA   
 - CDMA   
 
-## ARP (Address Resolution Protocol)
+## 4.2 ARP (Address Resolution Protocol)
 **IP 주소를 물리적 네트워크 주소로 대응시키기 위해 사용되는 프로토콜이다.**
 
 - One-Hop으로 이루어진 내부 네트워크(Local Area Network)에서만 작동하는 프로토콜이다.   
@@ -198,16 +198,16 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - IP의 네트워크 주소가 일치하지 않으면 외부 네트워크의 IP이므로 게이트웨이(라우터)에 전달된다.   
 - 2계층은 One-hop의 Peer-to-Peer에만 신경쓰기 때문에 외부로 향하는 라우터의 MAC주소를 Dest MAC 주소로 한다.   
 
-# Ethernet (1L&2L : Physical Layer&Data-link Layer)
+# 5. Ethernet (1L&2L : Physical Layer&Data-link Layer)
 
-## 이더넷 특징
+## 5.1 이더넷 특징
 - OSI 모델의 **물리 계층**에서 신호와 배선, **데이터 링크 계층**에서 MAC(media access control) 패킷과 프로토콜의 형식을 정의한다.    
 - 이더넷 기술은 대부분 **IEEE 802.3 규약**으로 표준화되었다.   
 - 네트워크에 연결된 각 기기들이 **48비트**의 고유의 **MAC 주소**를 가지고 이 주소를 이용해 상호간에 데이터를 주고 받을 수 있도록 만들어졌다.   
 - **CSMA/CD**라는 multiple access protocol을 이용하여 통신한다.   
 
-# Network Layer (3L)
-## IPv4 주소체계
+# 6. Network Layer (3L)
+## 6.1 IPv4 주소체계
 - IP 주소: 32비트의 이진수   
 - 사용 가능한 IP주소 개수는 2의 32승 개다.   
 - IP주소는 네트워크 주소(네트워크 ID)와 호스트 주소(호스트 ID)로 구성된다.   
@@ -271,40 +271,34 @@ Class A: 10.0.0.0 ~ 10.255.255.255
 Class B: 172.16.0.0 ~ 172.31.255.255   
 Class C: 192.168.0.0 ~ 192.168.255.255   
 
-### data plane과 control plane 개념
+## 6.2 data plane과 control plane 개념
 
-## Network layer의 역할
-
+## 6.3 Network layer의 역할
 - Segment를 호스트에게 전송(Segment에 추가 데이터를 붙여서 Packet으로 전송).   
 - 전송부에서는 segment들을 datagram(혹은 Packet)으로 담아서 전송한다.   
 - 수신부에서는 Segment부분을 Transport layer로 올려줌.   
 - Network layer 프로토콜은 모든 호스트와 라우터에 구현된다.   
 - 라우터는 IP 패킷(datagram)의 헤더를 보고 어느 경로로 보낼지 결정한다.   
 
-## Network layer의 두가지 핵심 기능
-
+## 6.4 Network layer의 특징
+### 두가지 핵심 기능
 - **forwarding**: 라우터에서 다음 라우터에게 패킷을 전달해주는 것.   
 - **routing**: 최적의 경로를 찾는 것.   
 
 패킷 헤더의 dest IP주소를 보고 routing algorithm을 통해 업데이트한 local forwarding table에서   
 적절한 출력링크를 찾아 전송한다.   
 
-## Network layer service models
-
+### Network layer service models
 3계층의 Service Model은 Best-effort 방식이다(제대로 전송하려고 최선을 다할 뿐 보장은 하지 않는다). -> 신뢰성을 보장하는 것은 4계층에서 한다.   
 3계층에는 Connection이 필요하지 않다(Connection-less service).   
 
-## Longest prefix matching
-IP 주소 앞 부분이 가장 길게 일치하는 항목을 찾는 방법.   
-
-## The Internet network layer 구성요소
+### Internet network layer 구성요소
 - routing protocol (path selection; RIP OSPF, BGP)   
 - forwarding table   
 - IP protocol   
 - ICMP(Internet Control Message) protocol  (error reporting; router signaling)   
 
-## IP datagram format
-
+## 6.5 IP datagram format
 ![image00002](https://user-images.githubusercontent.com/49184890/122635657-34cde700-d120-11eb-9273-542d510c62f2.PNG)   
 
 - IP datagram의 헤더는 총 20Bytes이다.   
@@ -327,11 +321,66 @@ IP 주소 앞 부분이 가장 길게 일치하는 항목을 찾는 방법.
 - offset은 합칠 패킷의 순서를 알기 위한 값이다(8 Bytes단위로 끊음).    
 - length는 헤더(20 Bytes)를 포함한 크기이므로 실제 segment의 크기는 length – 20 Bytes이다.   
 
-## IP addressing
+## 6.6 IP addressing
 ### (IP addressing: CIDR)
-### (IP addresses: how to get one?)
+> 참고 : https://kim-dragon.tistory.com/9   
+CIDR: Classless Inter-Domain Routing   
+Class개념을 이용하지 않음.   
+host를 full로 사용하지 않는 낭비를 줄이기 위해 network주소를 더 많이 표현하고 표현가능한 host주소를 줄임.   
 
-# Transport Layer (4L)
+### (IP addresses: how to get one?)
+host가 IP 주소를 어떻게 얻을까?   
+-> DHCP: Dynamic Host Configuration Protocol (동적으로 IP주소를 호스트에게 주는 프로토콜)   
+
+### DHCP client-server scenario
+DHCP server가 IP를 부여한다.
+1. client는 DHCP서버가 있는지 확인하기 위해 DHCP discover메시지를 broadcast한다. (Dest IP: 255.255.255.255)
+2. DHCP server는 답장으로 IP address(yiaddr)를 하나 제안한다.(DHCP offer)
+3. client는 제안받은 IP(yiaddr)를 사용하겠다는 것을 알리기 위해 DHCP request를 broadcast한다.
+4. DHCP server는 ACK메시지를 broadcast하여 yiaddr을 사용하기로 했음을 알린다.
+
+> DHCP discover(client->server) -> DHCP offer(server->client) -> DHCP request(client->server) -> DHCP ACK(server->client)   
+
+
+### (DHCP: more than IP addresses)
+- IP주소만 제공하는 것이 아니라 router(Gateway)의 주소에 대한 정보도 알려준다.   
+- DNS server의 이름과 ip address를 알려준다.   
+- Subnet mask(network mask)를 제공한다.
+
+### (IP addresses: how to get one?)
+20 bits를 network 주소로 사용하게 된다면 나머지 32-20 = 12 bits는 host 주소로 하용한다.   
+12 bits로 가질 수 있는 host 주소의 개수는 (2^12 – 2) 개다.
+
+### Hierarchical addressing: more specific routes
+- 라우팅할 때에는 네트워크 주소가 더 길게 매칭이 되는 라우터로 라우팅한다.
+
+## 6.7 NAT: network address translation
+- 내부 네트워크는 사설 IP를 사용한다. (내부 네트워크는 사설 네트워크로 구성)   
+- 내부 네트워크들과 연결된 외부로 향하는 라우터 하나만 공인 IP를 사용한다.   
+- NAT은 사설 IP를 공인 IP로 바꾸어 통신하도록 도와준다.   
+- NAT translation table에 { WAN side addr : LAN side addr }을 기록한다.   
+- Port forwarding을 통해 사설 ip 호스트에서 서버를 운영할 수 있도록 한다.   
+- Port forwarding은 (외부ip:포트 -> 사설ip:포트) 라우팅 경로를 미리 설정하는 것이다.   
+
+## 6.8 ICMP: Internet Control Message Protocol
+- 오류나 request/reply 메시지(Control messages)를 전달하기 위해서 Type과 Code를 이용하여 알린다.   
+- IPv4일 경우에는 정보 오류를 알려주기 위한 기능만을 제공하지만 IPv6에서는 더 많은 기능을 제공한다.   
+- 예를 들어 TTL이 0이 되어 패킷이 drop되면 source에게 (Type:11, Code:0)을 통해 알려준다.   
+
+### (Traceroute and ICMP: ICMP를 이용한 Traceroute 구현)
+- 호스트가 TTL이 1인 패킷을 전달하면 first hop 라우터에서 TTL이 0이므로 Control message를 호스트에게 보내준다.   
+- 호스트는 라우터로부터 받은 Control message 응답시간을 보고 전송 delay를 유추한다.   
+- 마찬가지로 호스트에서 TTL이 2, 3, 4, 5...인 패킷을 전달하여 라우터들의 Control message 응답시간을 측정한다.   
+- 마지막에 dest까지 도달하면 접속하려는 port번호가 사용하지 않는 port이므로  dest port unreachable 응답을 받는다.   
+
+## 6.9 IPv6와 IPv4의 공존: Tunneling기법
+- 어떤 라우터는 IPv6로 동작하고 어떤 라우터는 IPv4로 동작한다.   
+- IPv4는 IPv6와 호환성 문제가 있다.   
+- IPv6 Router=> IPv4 Router의 경우: IPv6의 datagram을 통째로 IPv4의 segment에 넣어 새로운 패킷을 전송한다.   
+- IPv4 Router=> IPv6 Router의 경우: IPv4 패킷의 segment를 패킷으로 보낸다(IPv4 데이터를 때어내어 IPv6 패킷만 보냄).   
+- IPv6 라우터는 패킷 내부에 IPv6의 datagram이 들어있는지 판단할 수 있어야 한다(헤더의 upper layer로 판단).   
+
+# 7. Transport Layer (4L)
 ## TCP/IP Protocol
 https://tldp.org/LDP/tlk/net/net.html    
 
