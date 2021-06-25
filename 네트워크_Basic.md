@@ -324,9 +324,12 @@ Class C: 192.168.0.0 ~ 192.168.255.255
 ## 6.6 IP addressing
 ### (IP addressing: CIDR)
 > 참고 : https://kim-dragon.tistory.com/9   
-CIDR: Classless Inter-Domain Routing   
+
+CIDR: **Classless** Inter-Domain Routing   
 Class개념을 이용하지 않음.   
 host를 full로 사용하지 않는 낭비를 줄이기 위해 network주소를 더 많이 표현하고 표현가능한 host주소를 줄임.   
+
+> TCP/IP 네트워크가 1980년대 인터넷으로 성장함에 따라, 더욱 유동적인 주소 체계가 급속히 필요해졌다. 이는 서브넷, Variable-Length 서브넷, 그리고 마침내 사이더의 개발을 야기하였다. 이전의 클래스 구분이 이제는 무시되므로, 새로운 시스템은 클래스 없는 라우팅이라고 불렸으며, 상대적으로 이전의 시스템은 클래스 있는 라우팅으로 불리게 되었다.
 
 ### (IP addresses: how to get one?)
 host가 IP 주소를 어떻게 얻을까?   
