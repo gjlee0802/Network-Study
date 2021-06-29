@@ -397,6 +397,18 @@ Q: global or decentralized information?
 ### OSPF
 
 # 7. Transport Layer (4L)
+## Reliable Data Transfer
+### rdt 1.0
+### rdt 2.0
+### rdt 2.1
+### rdt 3.0
+
+## Stop-and-Wait vs Pipelining
+
+## Pipelined protocols
+### Go-back-N
+### Selective Repeat
+
 ## TCP/IP Protocol
 https://tldp.org/LDP/tlk/net/net.html    
 
