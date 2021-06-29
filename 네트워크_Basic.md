@@ -382,6 +382,19 @@ DHCP server가 IP를 부여한다.
 - IPv6 Router=> IPv4 Router의 경우: IPv6의 datagram을 통째로 IPv4의 segment에 넣어 새로운 패킷을 전송한다.   
 - IPv4 Router=> IPv6 Router의 경우: IPv4 패킷의 segment를 패킷으로 보낸다(IPv4 데이터를 때어내어 IPv6 패킷만 보냄).   
 - IPv6 라우터는 패킷 내부에 IPv6의 datagram이 들어있는지 판단할 수 있어야 한다(헤더의 upper layer로 판단).   
+- 
+## Routing algorithm classification
+Q: global or decentralized information?   
+ - global: 그래프에 대한 모든 정보(Vertex, cost)를 알고 구하는 것. => Algorithm: “link state” algorithms
+ - decentralized(distributed): 인접한 정보(인접한 Vertex, cost)만 아는 것. => Algorithm: “distance vector” algorithms
+   
+### Link state routing algorithm
+### Distance vector algorithm
+## Inter-AS tasks (eBGP, iBGP)
+## Choosing among multiple ASes
+## Intra-AS Routing
+### RIP
+### OSPF
 
 # 7. Transport Layer (4L)
 ## TCP/IP Protocol
