@@ -389,12 +389,27 @@ Q: global or decentralized information?
  - decentralized(distributed): 인접한 정보(인접한 Vertex, cost)만 아는 것. => Algorithm: “distance vector” algorithms
    
 ### Link state routing algorithm
+- Dijkstra's algorithm
+- Bellmanford algorithm
+#### Oscillations possible
+cost를 traffic으로 볼 때 발생하는 문제점.   
+
 ### Distance vector algorithm
+- Bellmanford **equation** (dynamic programming)
+#### Routing loops
+link cost가 변화하는 경우 발생 가능한 문제점.
 ## Inter-AS tasks (eBGP, iBGP)
+- 어떤 네트워크(AS)로 접근할 수 있는지 알아야 한다(**eBGP : external BGP**).   
+- AS 내의 모든 라우터들에게 정보를 공유해야 한다(**iBGP : internal BGP**).   
 ## Choosing among multiple ASes
+만약 x에 연결된 AS가 두가지 이상이라면   
+1. x로 접근하기 위해 거쳐야 하는 AS의 수가 적은 길을 택한다.   
+2. 만약 거쳐야 하는 AS 수가 같으면, AS 내부에서 Shortest Path를 찾는다(Hot-potato 방식).   
+   
+> Hot potato: 전체적인 cost로 정확하게 판단하는 것이 아니라 intra-AS에서 least-cost를 찾는 것.    
 ## Intra-AS Routing
-### RIP
-### OSPF
+### RIP (Routing Information Protocol) : distance vector algorithm
+### OSPF (Open Shortest Path First) : link-state algorithm
 
 # 7. Transport Layer (4L)
 ## Reliable Data Transfer
