@@ -409,13 +409,56 @@ link cost가 변화하는 경우 발생 가능한 문제점.
 > Hot potato: 전체적인 cost로 정확하게 판단하는 것이 아니라 intra-AS에서 least-cost를 찾는 것.    
 ## Intra-AS Routing
 ### RIP (Routing Information Protocol) : distance vector algorithm
+#### RIP : example
+cost를 홉의 수로 판단하여 기록한다.   
+![image00004](https://user-images.githubusercontent.com/49184890/124355489-69778d80-dc4c-11eb-85bf-2308536bcb25.PNG)   
+D가 A로부터 z로 향하는 홉 수가 더 적은 4홉인 정보를 받으면, 다음과 같이 z로 향하는 정보를 수정한다.   
+![image00005](https://user-images.githubusercontent.com/49184890/124355495-6bd9e780-dc4c-11eb-9849-395b0b3149b8.PNG)   
+#### RIP : link failure, recovery
+정보 갱신 여부에 상관없이 주기적으로(30초) 계속 정보를 알려줘야 한다.   
+계속 정보가 넘어오지 않는 경우에는 죽은 것으로 판단하여 테이블을 업데이트 한다.   
+업데이트를 한 정보를 주변 이웃 노드들에게 알려준다.   
+#### RIP : table processing
+RIP routing table은 Application-level의 프로세스인 route-d(daemon)에 의해 관리된다.   
+정보는 UDP로 전달한다.   
+
 ### OSPF (Open Shortest Path First) : link-state algorithm
+AS 전체에 대한 모든 정보를 다 알아야 하며, 모든 노드들이 모든 정보를 공유한다.   
+각각의 노드에서 topology map을 구성할 수 있다.   
+OSPF는 IS-IS routing protocol과 거의 동일하다.   
 
 # 7. Transport Layer (4L)
+
+
+## Multiplexing / demultiplexing
+- multiplexing(송신부): Transport 헤더를 추가.   
+- demultiplexing(수신부): 올바른 소켓으로 Segments를 전달하기 위해 헤더 정보를 참조.   
+## TCP와 UDP
+### TCP 특징
+TCP는 다음의 동작을 통해 신뢰성을 보장한다.   
+- congestion control   
+- flow control   
+- connection setup   
+- TCP는 소켓이 1 대 1로 연결되어야 한다.   
+### UDP 특징
+- UDP는 데이터의 손실을 검사하지만 다시 보내라는 요청을 하지 않는다.   
+- no-frills extension of “best-effort” IP   
+- no connection establishment   
+- no connection state at sender, receiver   
+- small HDR size   
+- no congestion control: TCP의 경우에는 버퍼를 고려하여 속도를 조절한다.   
+- UDP는 소켓이 1 대 N으로 연결 가능하다.   
+
 ## Reliable Data Transfer
 ### rdt 1.0
 ### rdt 2.0
 ### rdt 2.1
+#### rdt 2.1 : Sender FSM
+<img width="500" alt="image00008" src="https://user-images.githubusercontent.com/49184890/124355800-0686f600-dc4e-11eb-9e28-42ed87b9ed36.PNG">   
+
+#### rdt 2.1 : Receiver FSM
+<img width="500" alt="image00009" src="https://user-images.githubusercontent.com/49184890/124355803-0850b980-dc4e-11eb-87c3-db0c2d2e7251.PNG">   
+
 ### rdt 3.0
 
 ## Stop-and-Wait vs Pipelining
