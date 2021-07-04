@@ -450,20 +450,46 @@ TCP는 다음의 동작을 통해 신뢰성을 보장한다.
 - UDP는 소켓이 1 대 N으로 연결 가능하다.   
 
 ## Reliable Data Transfer
+rdt 버전별 특징
+- rdt 2.0: ACK와 NAK 메세지를 이용하여 정상 송수신 확인   
+- rdt 2.1: ACK/NAK 메시지가 깨진 경우를 고려   
+- rdt 2.2: ACK 메세지만을 이용하여 ACK와 NAK을 표현   
+- rdt 3.0: Timeout을 도입하여 에러 검출된 경우뿐만 아니라 loss(아예 전달이 되지 않은 것)를 고려   
 ### rdt 1.0
 ### rdt 2.0
 ### rdt 2.1
+만약 ACK/NAK에서 에러가 검출되면?   
+문제점: 패킷이 중복될 수 있다.   
+해결책: Sequence number을 패킷에 붙여서 중복된 패킷을 검출한다(Sequence nubmer는 0과 1로만 이루어져도 된다).   
 #### rdt 2.1 : Sender FSM
 <img width="500" alt="image00008" src="https://user-images.githubusercontent.com/49184890/124355800-0686f600-dc4e-11eb-9e28-42ed87b9ed36.PNG">   
 
 #### rdt 2.1 : Receiver FSM
 <img width="500" alt="image00009" src="https://user-images.githubusercontent.com/49184890/124355803-0850b980-dc4e-11eb-87c3-db0c2d2e7251.PNG">   
 
+### rdt 2.2
+Sequence number 1에 대한 ACK을 전송하여 Seq num 0에 대한 NAK을 알려줄 수 있다.   
+-> NAK 메세지가 별도로 존재하지 않으며, ACK 메세지로만 ACK과 NAK을 알려줄 수 있다.   
 ### rdt 3.0
+timeout 개념을 도입했다.   
+충분한 시간 내에 ACK/NAK 메시지가 수신되지 않았으면 loss 된 것으로 판단한다.   
+
+#### rdt 3.0 : Sender FSM
+<img width="500" alt="image00010" src="https://user-images.githubusercontent.com/49184890/124387405-7f9f4f80-dd19-11eb-90f9-3b580ed02a05.PNG">   
+
+#### rdt 3.0 : in action
+<img width="500" alt="image00011" src="https://user-images.githubusercontent.com/49184890/124387429-a198d200-dd19-11eb-8687-cc877b2850c8.PNG">   
 
 ## Stop-and-Wait vs Pipelining
+Stop-and-Wait : 일단 전송한 다음에 멈추고 ACK/NAK를 기다려서 다시 처리하는 방식   
+<img width="457" alt="image00013" src="https://user-images.githubusercontent.com/49184890/124387593-2edc2680-dd1a-11eb-8988-a680ec268302.PNG">   
+Pipelining : 한번에 여러 패킷을 전송하고 전송한 여러 패킷에 대한 ACK을 수신하는 방식
+<img width="466" alt="image00014" src="https://user-images.githubusercontent.com/49184890/124387615-43202380-dd1a-11eb-8e61-a718b37723d2.PNG">   
 
 ## Pipelined protocols
+- Go-back-N : N 개의 패킷을 전송하고 기다린다. **Cumulative ack을 사용**한다.      
+- Selective repeat : 독립적인 여러 ACK을 각각의 패킷에게 응답한다. 송신부는 ACK 응답을 받지 못한 패킷에 대해서만 다시 전달한다.   
+
 ### Go-back-N
 ### Selective Repeat
 
