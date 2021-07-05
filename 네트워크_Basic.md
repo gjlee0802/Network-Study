@@ -491,7 +491,30 @@ Pipelining : 한번에 여러 패킷을 전송하고 전송한 여러 패킷에 
 - Selective repeat : 독립적인 여러 ACK을 각각의 패킷에게 응답한다. 송신부는 ACK 응답을 받지 못한 패킷에 대해서만 다시 전달한다.   
 
 ### Go-back-N
+- N개의 패킷을 전송하고 기다린다.   
+- 수신측은 Cumulative ACK만을 전송한다.   
+- Cumulative ACK는 연속적으로 받은 패킷에 대해 잘 받았음을 알려주는 ack이다.   
+- 송신부는 가장 오래된 in-flight 패킷에서 타이머를 가동한다. 타이머가 expire 됐을 때(시간이 만료했을 때) 모든 패킷을 다시 전송한다.   
+> 장점
+> - 단순하다.
+> - 수신부에 버퍼가 필요없다. 
+#### GBN : sender extended FSM
+<img width="500" alt="image00015" src="https://user-images.githubusercontent.com/49184890/124472614-4b8b6380-ddd9-11eb-9bf2-5d1c13180a9f.PNG">   
+
+#### GBN: receiver extended FSM
+<img width="500" alt="image00016" src="https://user-images.githubusercontent.com/49184890/124472688-6067f700-ddd9-11eb-8245-9b48621a043a.PNG">   
+수신부는 받을 패킷의 번호만 유지하면 된다.   
+
 ### Selective Repeat
+- 수신부는 독립적인 ACK를 각각의 패킷에게 응답한다.   
+- 송신부는 제대로 수신되지 않은 패킷에 대해서만 다시 전달한다.   
+- GBN보다 효율적인 프로토콜이다.
+
+> GBN과의 차이점   
+> 1. 각각의 패킷들에 대해서 Timeout을 체크한다(타이머가 각 패킷에 대해서 작동해야 한다). GBN의 경우에는 가장 오래된 패킷에 대한 타이머 하나만 유지하면 된다.   
+> 2. GBN의 경우 receiver에 버퍼가 필요없지만 Selective repeat의 경우에는 receiver에도 N사이즈의 Receive window만큼 버퍼가 있어야 한다(버퍼에 정상 수신된 버퍼는 미리 저장한다).   
+
+#### Selective repeat : 딜레마, Window 사이즈와 Sequence number 사이의 관계
 
 ## TCP/IP Protocol
 https://tldp.org/LDP/tlk/net/net.html    
