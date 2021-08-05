@@ -606,6 +606,7 @@ DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제
 - IPSECKEY record - TCP/IP에서 보안을 담당하는Internet Protocol Security (IPSEC)와 관련된 레코드입니다.   
 - SSHFP 레코드 : 이 레코드는 'SSH 공개 키 지문'을 저장합니다. SSH는 Secure Shell의 약자로서, 비보안 네트워크에서의 보안 통신을 위한 암호화 네트워킹 프로토콜입니다.   
 ### Reverse DNS Lookup
+일반적인 도메인 조회가 영문 주소(도메인 네임)를 DNS에 질의하여 IP 주소를 찾는 것과 반대로, IP 주소를 사용하여 도메인 네임을 찾는 것을 의미한다.   
 
 ### 도메인 이름 등록 과정과 원리
 ![84002208-04972880-a9a3-11ea-9f95-d46177278940](https://user-images.githubusercontent.com/49184890/128293030-fe77b69f-dec2-4980-8a4f-3b0cc034fb08.png)   
