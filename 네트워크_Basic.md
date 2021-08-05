@@ -616,3 +616,10 @@ DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제
 - 그 다음으로는 Registrar라고 하는 등록 대행자가 있는데, 등록 대행자는 등록자가 등록소에 등록하는 것을 등록해주는 대행역할   
 - 만약 등록자가 example.com을 등록하고 싶으면 등록자는 등록대행자에게 도메인을 전달하고 등록대행자는 등록소에 해당 도메인을 등록하도록 전달한다. 하지만 기존에 도메인이 존재하면 등록할 수 없고 등록하기 위해서는 수수료를 지불해야 한다.   
 - Root name server는 전세계에 있는 Top-level domain 서버들의 주소를 기억하고 있고, 우리의 도메인을 세팅하기 위해서는 authoritative name server를 구축해야 한다.   
+
+## 8.2 HTTP
+
+# Proxy Server
+> 참고 :   
+> 프록시 서버 개념 : https://digiconfactory.tistory.com/entry/%ED%94%84%EB%A1%9D%EC%8B%9C-%EC%84%9C%EB%B2%84-Proxy-Server-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80   
+> Nginx를 사용하여 프로시 서버 만들기 : https://velog.io/@jeff0720/2018-11-18-2111-%EC%9E%91%EC%84%B1%EB%90%A8-iojomvsf0n   
