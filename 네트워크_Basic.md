@@ -618,7 +618,18 @@ DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제
 - Root name server는 전세계에 있는 Top-level domain 서버들의 주소를 기억하고 있고, 우리의 도메인을 세팅하기 위해서는 authoritative name server를 구축해야 한다.   
 
 ## 8.2 HTTP
-
+### 8.2.1 HTTP 특징
+- TCP를 사용한다.
+- 포트번호는 80을 사용한다.
+- HTTP는 **stateless** 통신이다(이는 서버가 클라이언트가 과거에 했던 요청에 대한 정보를 유지하지 않는 것을 의미).
+- non-persistent 방식과 persistent 방식이 있다.
+### 8.2.2 Non-persistent HTTP & persistent HTTP
+- Non-persistent HTTP : Object를 하나 받고 TCP connection을 끊는다(Object 전송마다 3-way handshaking을 수행한다).   
+- Persistent HTTP : 여러 Object를 연속으로 받으며 connection을 유지한다(Object들을 전송하기 전 한번만 3-way handshaking을 수행해준다).   
+### 8.3 HTTP request message
+### 8.4 HTTP methods
+### 8.5 HTTP response message
+### 8.6 HTTP response status codes
 # Proxy Server
 > 참고 :   
 > 프록시 서버 개념 : https://digiconfactory.tistory.com/entry/%ED%94%84%EB%A1%9D%EC%8B%9C-%EC%84%9C%EB%B2%84-Proxy-Server-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80   
