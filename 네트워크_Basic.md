@@ -537,12 +537,13 @@ TCP/IP Frame Structure
 
 # Application Layer
 ## DNS: domain name system
-참고
+> 참고 :    
 > https://it-mesung.tistory.com/180   
 > https://samsikworld.tistory.com/489   
 > https://www.cloudflare.com/ko-kr/learning/dns/what-is-dns/   
    
 ### DNS는 A distributed(분산된), hierarchical(계층적) database이다.
+> 참고 : https://www.cloudflare.com/ko-kr/learning/dns/dns-server-types/   
 ![84001753-3cea3700-a9a2-11ea-801a-2f4acaf3e3c9](https://user-images.githubusercontent.com/49184890/128291782-76a4babf-cffc-4cef-8cca-097e8c4cfa2f.png)   
 - http://www.naver.com/index.html : 이런 형식을 URL이라고 부른다.   
 - www.naver.com : 이런 형식을 **Host Name**이라고 부른다.   
@@ -572,3 +573,45 @@ DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제
 > "나는 모르는데 이 서버한테 물어봐~"   
 > Local DNS가 제일 바빠짐   
 - 비재귀 쿼리
+
+### DNS 캐싱
+- 캐싱의 목적은 데이터를 임시 저장하여, 데이터 요청에 대해 성능과 신뢰성을 높이는 것   
+- 요청하는 클라이언트와 가까운 곳에 데이터를 저장함으로써, DNS 쿼리를 조기에 확인할 수 있고 DNS 조회 체인의 추가 쿼리를 피할 수 있으므로, 로드 시간이 향상되고 대역폭/CPU 소비가 줄어듦   
+- DNS 데이터는 다양한 위치에 캐시될 수 있으며, 각 위치는 TTL(Time-To-Live)에 의해 정의된 설정 시간 동안 DNS 레코드를 저장   
+
+#### 운영 체제(OS) 수준 DNS 캐싱
+- OS 수준 DNS 확인자는 DNS 쿼리가 컴퓨터를 떠나기 전의 두 번째 중단점이며, 로컬에 있는 마지막 중단점   
+- 이 쿼리를 처리하도록 설계된 OS 내부의 프로세스를 일반적으로 **"스텁 확인자"** 또는 **"DNS 클라이언트"** 라고 함   
+- 스텁 확인자는 애플리케이션에서 요청을 받으면 먼저 자체 캐시를 검사하여 레코드가 있는지 확인   
+- 레코드가 없으면 로컬 네트워크 외부의 (재귀 플래그가 설정된) DNS 쿼리를 인터넷 서비스 공급자(ISP) 내부의 DNS 재귀 확인자로 전송   
+
+### DNS Records
+> 참고 : https://www.cloudflare.com/ko-kr/learning/dns/dns-records/   
+#### 가장 일반적으로 사용되는 레코드
+- A 레코드 : 도메인의 IP 주소를 갖고 있는 레코드.   
+- CNAME 레코드 : 도메인의 별칭. 하나의 도메인이나 하위 도메인을 다른 도메인으로 전달하며, IP 주소를 제공하지는 않음.   
+- MX 레코드 : 이메일을 이메일 서버로 전송.   
+- TXT 레코드 : 관리자가 텍스트 메모를 레코드에 저장 가능.   
+- NS 레코드 : DNS 항목의 이름 서버를 저장.   
+- SOA 레코드 : 도메인에 대한 관리자 정보를 저장.   
+- SRV 레코드 : 특정 서비스에 대한 포트를 지정.   
+- PTR 레코드 : 리버스 조회에서 도메인 이름을 제공.   
+#### 아래는 덜 일반적으로 사용되는 레코드
+- CAA 레코드 : '인증 기관 인증' 레코드로서, 이 레코드에서 도메인 소유자는 해당 도메인에 대해 인증서를 발급할 수 있는 인증 기관을 명시할 수 있습니다. CAA 레코드가 없으면, 누구나 도메인에 대한 인증서를 발급할 수 있습니다. 이 레코드는 하위 도메인에도 상속됩니다.   
+- DNSKEY 레코드 :  DNSSEC(Domain Name System Security Extension) 서명을 확인하는 데 사용되는 공개 키가 포함되어 있습니다.   
+- CDNSKEY 레코드 :  이 레코드는 DNSKEY 레코드의 자식 복사본이며, 부모에게 전송되기 위한 것입니다.   
+- CERT 레코드 : '인증서 레코드'로서, 공개 키 인증서를 저장합니다.   
+- DCHID 레코드 : ‘DHCP 식별자' 레코도로서, 이는 IP 네트워크에서 사용되는 표준화된 네트워크 프로토콜인 DHCP(Dynamic Host Configuration Protocol)에 대한 정보를 저장합니다.   
+- DNAME 레코드 : ‘위임 이름' 레코드로서, CNAME과 마찬가지로 도메인 별칭을 생성하지만 이 별칭은 모든 하위 도메인도 리디렉션합니다. 예를 들어 'example.com'의 소유자가 'website.net'도메인을 구매하고, 여기에 'example.com'을 가리키는 DNAME 레코드를 부여한 경우, 해당 포인터는 'blog.website.net' 및 다른 하위 도메인으로도 확장할 수 있습니다.   
+- IPSECKEY record - TCP/IP에서 보안을 담당하는Internet Protocol Security (IPSEC)와 관련된 레코드입니다.   
+- SSHFP 레코드 : 이 레코드는 'SSH 공개 키 지문'을 저장합니다. SSH는 Secure Shell의 약자로서, 비보안 네트워크에서의 보안 통신을 위한 암호화 네트워킹 프로토콜입니다.   
+### Reverse DNS Lookup
+
+### 도메인 이름 등록 과정과 원리
+![84002208-04972880-a9a3-11ea-9f95-d46177278940](https://user-images.githubusercontent.com/49184890/128293030-fe77b69f-dec2-4980-8a4f-3b0cc034fb08.png)   
+- 도메인 이름 등록 구조에서 최상위에 위치하는 것은 ICANN이라고 하는 비영리 단체   
+- ICANN은 전세계에 있는 IP 주소를 관리함과 동시에 Root Name Server의 관리자 역할 담당   
+- Root Name Server 밑에는 Registry라는 등록소가 존재하는데, 얘네는 Top-level domain(.com)을 관리   
+- 그 다음으로는 Registrar라고 하는 등록 대행자가 있는데, 등록 대행자는 등록자가 등록소에 등록하는 것을 등록해주는 대행역할   
+- 만약 등록자가 example.com을 등록하고 싶으면 등록자는 등록대행자에게 도메인을 전달하고 등록대행자는 등록소에 해당 도메인을 등록하도록 전달한다. 하지만 기존에 도메인이 존재하면 등록할 수 없고 등록하기 위해서는 수수료를 지불해야 한다.   
+- Root name server는 전세계에 있는 Top-level domain 서버들의 주소를 기억하고 있고, 우리의 도메인을 세팅하기 위해서는 authoritative name server를 구축해야 한다.   
