@@ -431,8 +431,8 @@ OSPF는 IS-IS routing protocol과 거의 동일하다.
 
 
 ## Multiplexing / demultiplexing
-- multiplexing(송신부): Transport 헤더를 추가.   
-- demultiplexing(수신부): 올바른 소켓으로 Segments를 전달하기 위해 헤더 정보를 참조.   
+- multiplexing(송신부): **many-to-one process.** Transport 헤더를 추가(포트를 적재).   
+- demultiplexing(수신부): **one-to-many process.** 올바른 소켓으로 Segments를 전달하기 위해 헤더 정보를 참조(포트를 참조).   
 ## TCP와 UDP
 ### TCP 특징
 TCP는 다음의 동작을 통해 신뢰성을 보장한다.   
