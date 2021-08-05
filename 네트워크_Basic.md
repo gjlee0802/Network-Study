@@ -546,7 +546,7 @@ TCP/IP Frame Structure
 ![84001753-3cea3700-a9a2-11ea-801a-2f4acaf3e3c9](https://user-images.githubusercontent.com/49184890/128291782-76a4babf-cffc-4cef-8cca-097e8c4cfa2f.png)   
 - http://www.naver.com/index.html : 이런 형식을 URL이라고 부른다.   
 - www.naver.com : 이런 형식을 **Host Name**이라고 부른다.   
-- .com : 이것은 **Top-level Domain Name (TLD)**이라고 부른다.   
+- .com : 이것은 **Top-level Domain Name(TLD)** 이라고 부른다.   
 - .naver.com : 이것은 **Second-level Domain Name**이라고 부른다.   
 
 ### DNS 조회 과정
@@ -566,5 +566,9 @@ DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제
    
 ### DNS 쿼리의 유형
 - 재귀 쿼리(recursive query) : 이와 같이 로컬 DNS 서버가 열 DNS 서버를 차례대로(Local DNS 서버 -> Root DNS 서버 -> com DNS 서버 -> naver.com DNS 서버) 물어보며 답을 찾는 과정이다.    
+> 요청 순서 : local DNS-> root DNS -> TLD DNS -> authoritative DNS   
+> Root DNS가 제일 바빠짐   
 - 반복 쿼리(iterated query) : 이 경우, DNS 클라이언트는 DNS 서버가 가능한 최상의 응답을 반환하도록 합니다. 쿼리한 DNS 서버가 쿼리 이름과 일치하는 이름을 갖고 있지 않은 경우, 하위 수준의 도메인 네임스페이스에 대해 권한 있는 DNS 서버에 대한 참조를 반환합니다.   
+> "나는 모르는데 이 서버한테 물어봐~"   
+> Local DNS가 제일 바빠짐   
 - 비재귀 쿼리
