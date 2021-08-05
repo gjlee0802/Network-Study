@@ -516,6 +516,9 @@ Pipelining : 한번에 여러 패킷을 전송하고 전송한 여러 패킷에 
 
 #### Selective repeat : 딜레마, Window 사이즈와 Sequence number 사이의 관계
 
+## TCP
+### TCP Segment 구조
+### TCP Sequence numbers, ACKs
 ## TCP/IP Protocol
 https://tldp.org/LDP/tlk/net/net.html    
 
