@@ -619,18 +619,71 @@ DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제
 
 ## 8.2 HTTP
 ### 8.2.1 HTTP 특징
-- TCP를 사용한다.
-- 포트번호는 80을 사용한다.
-- HTTP는 **stateless** 통신이다(이는 서버가 클라이언트가 과거에 했던 요청에 대한 정보를 유지하지 않는 것을 의미).
-- non-persistent 방식과 persistent 방식이 있다.
-### 8.2.2 Non-persistent HTTP & persistent HTTP
-- Non-persistent HTTP : Object를 하나 받고 TCP connection을 끊는다(Object 전송마다 3-way handshaking을 수행한다).   
+- TCP를 사용한다.   
+- 포트번호는 80을 사용한다.   
+- HTTP 서버는 기본적으로 **stateless** 서버이다(이는 서버가 클라이언트가 과거에 했던 요청에 대한 정보를 유지하지 않는 것을 의미).   
+- non-persistent 방식과 persistent 방식이 있다.   
+### 8.2.2 Non-persistent vs persistent
+- Non-persistent 방식 : Object를 하나 받고 TCP connection을 끊는다(Object 전송마다 3-way handshaking을 수행한다).   
 - Persistent HTTP : 여러 Object를 연속으로 받으며 connection을 유지한다(Object들을 전송하기 전 한번만 3-way handshaking을 수행해준다).   
-### 8.3 HTTP request message
-### 8.4 HTTP methods
-### 8.5 HTTP response message
-### 8.6 HTTP response status codes
+**HTTP는 Non-persistent 방식을 이용**한다. Persistent HTTP는 사용되지 않는다. 연결을 계속 유지하는 것이 대부분의 상황에서 비효율적이기 때문이다.   
+### 8.2.3 HTTP request message
+~~~
+------------------------------------
+GET /somdir/page.html HTTP/1.1		// Request line
+Host : www.someschool.edu		// Header lines start from here
+Connection : close			// Non-persistent HTTP
+user-agent : Mozilla/4.0
+Accept-language : fr
+------------------------------------
+~~~
+<img width="500" alt="http_req" src="https://user-images.githubusercontent.com/49184890/128319658-7e7c10c5-7dcc-469c-9ea3-2aa01061b144.jpg">    
+
+#### Request line 구성   
+- method 필드   
+- URL 필드   
+- HTTP 버전 필드   
+#### Header lines 구성   
+- Connection : Non-persistent 혹은 persistent 결정, close일 경우 Non-persistent를 의미    
+- user-agent : 서버에 요청을 하는 브라우저의 유형   
+- Accept language : 원하는 언어   
+
+method가 POST일 경우 entity body 내용이 필요할 수 있다.   
+### 8.2.4 HTTP methods
+### 8.2.5 HTTP response message
+~~~
+---------------------------------
+HTTP/1,1 200 OK				// Status line
+Connection : close			// Header lines start from here
+Date : Thu, 03 Jul 2003 12:00:15 GMT	
+Server : Apache/1.3.0 (Unix)
+Last-Modified : Sun, 5 May 2003 09:23:24 GMT
+Content-Length : 6821
+Content-Type : text/html
+(데이터 데이터 데이터 데이터 데이터....)   // Requested HTML file
+----------------------------------
+~~~
+#### Status line 구성
+- 버전 필드   
+- 상태 코드   
+- 해당 상태 메시지   
+### Header lines 구성
+- Connection : Non-persistent 혹은 persistent 결정, close일 경우 Non-persistent를 의미   
+- Date : HTTP 응답이 서버에 의해 생성되고 보낸 날짜와 시간   
+- Server : 메시지가 어떤 서버에 의해 만들어졌는지   
+- Last-Modified : 객체가 생성되거나 마지막으로 수정된 시각   
+- Content-Length : 송신되는 객체의 바이트   
+- Content-Type : 뒤따라 오는 데이터의 타입   
+
+### 8.2.6 HTTP response status codes
+- 200 OK   
+- 301 Moved Permanently   
+- 400 Bad Request   
+- 404 Not Found   
+- 505 HTTP Version Not Supported   
+## 8.3 쿠키(Cookie)
+
 # Proxy Server
 > 참고 :   
 > 프록시 서버 개념 : https://digiconfactory.tistory.com/entry/%ED%94%84%EB%A1%9D%EC%8B%9C-%EC%84%9C%EB%B2%84-Proxy-Server-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80   
-> Nginx를 사용하여 프로시 서버 만들기 : https://velog.io/@jeff0720/2018-11-18-2111-%EC%9E%91%EC%84%B1%EB%90%A8-iojomvsf0n   
+> Nginx를 사용하여 프록시 서버 만들기 : https://velog.io/@jeff0720/2018-11-18-2111-%EC%9E%91%EC%84%B1%EB%90%A8-iojomvsf0n   
