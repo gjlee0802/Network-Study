@@ -533,3 +533,38 @@ TCP/IP Frame Structure
   2개의 데이터가 서로 자리가 바뀌었을 때는 Parity나 Modular Sum 방식으로 검출할 수 없다.   
   하지만, CRC 방식은 이러한 경우에도 검출할 수 있는 방식이다.   
   CRC는 가장 많이 사용되는 Checksum 방식으로 에러 검출 성능이 우수하다.   
+
+
+# Application Layer
+## DNS: domain name system
+참고
+> https://it-mesung.tistory.com/180   
+> https://samsikworld.tistory.com/489   
+> https://www.cloudflare.com/ko-kr/learning/dns/what-is-dns/   
+   
+### DNS는 A distributed(분산된), hierarchical(계층적) database이다.
+![84001753-3cea3700-a9a2-11ea-801a-2f4acaf3e3c9](https://user-images.githubusercontent.com/49184890/128291782-76a4babf-cffc-4cef-8cca-097e8c4cfa2f.png)   
+- http://www.naver.com/index.html : 이런 형식을 URL이라고 부른다.   
+- www.naver.com : 이런 형식을 **Host Name**이라고 부른다.   
+- .com : 이것은 **Top-level Domain Name (TLD)**이라고 부른다.   
+- .naver.com : 이것은 **Second-level Domain Name**이라고 부른다.   
+
+### DNS 조회 과정
+8단계로 과정 이해하기
+- 사용자가 웹 브라우저에 'example.com'을 입력하면, 쿼리가 인터넷으로 이동하고 DNS 재귀 확인자가 이를 수신합니다.   
+- 이어서 확인자가 DNS 루트 이름 서버(.)를 쿼리합니다.   
+- 다음으로, 루트 서버가, 도메인에 대한 정보를 저장하는 최상위 도메인(TLD) DNS 서버(예: .com 또는 .net)의 주소로 확인자에 응답합니다. example.com을 검색할 경우의 요청은 .com TLD를 가리킵니다.   
+- 이제, 확인자가 .com TLD에 요청합니다.   
+- 이어서, TLD 서버가 도메인 이름 서버(example.com)의 IP 주소로 응답합니다.   
+- 마지막으로, 재귀 확인자가 도메인의 이름 서버로 쿼리를 보냅니다.   
+- 이제, example.com의 IP 주소가 이름 서버에서 확인자에게 반환됩니다.   
+- 이어서, DNS 확인자가, 처음 요청한 도메인의 IP 주소로 웹 브라우저에 응답합니다.   
+   
+DNS 조회의 8단계를 거쳐 example.com의 IP 주소가 반환되면, 이제 브라우저가 웹 페이지를 요청할 수 있습니다.   
+- 브라우저가 IP 주소로 HTTP 요청을 보냅니다.   
+- 해당 IP의 서버가 브라우저에서 렌더링할 웹 페이지를 반환합니다(10단계).   
+   
+### DNS 쿼리의 유형
+- 재귀 쿼리(recursive query) : 이와 같이 로컬 DNS 서버가 열 DNS 서버를 차례대로(Local DNS 서버 -> Root DNS 서버 -> com DNS 서버 -> naver.com DNS 서버) 물어보며 답을 찾는 과정이다.    
+- 반복 쿼리(iterated query) : 이 경우, DNS 클라이언트는 DNS 서버가 가능한 최상의 응답을 반환하도록 합니다. 쿼리한 DNS 서버가 쿼리 이름과 일치하는 이름을 갖고 있지 않은 경우, 하위 수준의 도메인 네임스페이스에 대해 권한 있는 DNS 서버에 대한 참조를 반환합니다.   
+- 비재귀 쿼리
