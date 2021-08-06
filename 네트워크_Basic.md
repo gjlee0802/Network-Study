@@ -393,14 +393,14 @@ Q: global or decentralized information?
 ### 6.9.2 Link state routing algorithm
 - Dijkstra's algorithm
 - Bellmanford algorithm
-#### 6.9.2-possible problem : Oscillations possible
+#### Link-state Possible problem: Oscillations possible
 cost를 traffic으로 볼 때 발생하는 문제점.   
 
 ### 6.9.3 Distance vector algorithm
 - Bellmanford **equation** (dynamic programming)
-#### 6.9.3-possible problem : Routing loops
+#### Distance-vector Possible problem : Routing loops
 link cost가 변화하는 경우 발생 가능한 문제점.
-### 6.9.4 Inter-AS tasks (eBGP, iBGP)
+### 6.9.4 Inter-AS Routing (eBGP, iBGP)
 - 어떤 네트워크(AS)로 접근할 수 있는지 알아야 한다(**eBGP : external BGP**).   
 - AS 내의 모든 라우터들에게 정보를 공유해야 한다(**iBGP : internal BGP**).   
 ### 6.9.5 Choosing among multiple ASes
@@ -410,21 +410,26 @@ link cost가 변화하는 경우 발생 가능한 문제점.
    
 > Hot potato: 전체적인 cost로 정확하게 판단하는 것이 아니라 intra-AS에서 least-cost를 찾는 것.    
 ### 6.9.6 Intra-AS Routing
-#### 6.9.6-(a) RIP (Routing Information Protocol) : distance vector algorithm
-#### 6.9.6-(b) RIP : example
+> 참고 : https://www.net.t-labs.tu-berlin.de/teaching/computer_networking/04.05.htm
+- RIP(Routing Information Protocol) : IGP의 일종으로 **중소 규모의 조직 내에서 사용**, 목적지까지 **라우터 수를 중시**해 라우팅 테이블 작성.   
+- OSPF(Open Shortest Path First) : IGP의 일종으로 **중대 규모의 조직 내에서 사용**, 목적지까지의 **속도를 중시**해 라우팅 테이블 작성.   
+- IGRP(Cisco's propriety Interior Gateway Routing Protocol) : EGP의 일종으로 목적지까지의 **라우터 수를 중시**해 라우팅 테이블 작성.   
+#### 6.9.6-(a) RIP : Routing Information Protocol
+##### RIP : distance vector algorithm
+##### RIP : example
 cost를 홉의 수로 판단하여 기록한다.   
 ![image00004](https://user-images.githubusercontent.com/49184890/124355489-69778d80-dc4c-11eb-85bf-2308536bcb25.PNG)   
 D가 A로부터 z로 향하는 홉 수가 더 적은 4홉인 정보를 받으면, 다음과 같이 z로 향하는 정보를 수정한다.   
 ![image00005](https://user-images.githubusercontent.com/49184890/124355495-6bd9e780-dc4c-11eb-9849-395b0b3149b8.PNG)   
-#### 6.9.6-(c) RIP : link failure, recovery
+##### RIP : link failure, recovery
 정보 갱신 여부에 상관없이 주기적으로(30초) 계속 정보를 알려줘야 한다.   
 계속 정보가 넘어오지 않는 경우에는 죽은 것으로 판단하여 테이블을 업데이트 한다.   
 업데이트를 한 정보를 주변 이웃 노드들에게 알려준다.   
-#### 6.9.6-(d) RIP : table processing
+##### RIP : table processing
 RIP routing table은 Application-level의 프로세스인 route-d(daemon)에 의해 관리된다.   
 정보는 UDP로 전달한다.   
 
-### 6.9.7 OSPF (Open Shortest Path First) : link-state algorithm
+#### 6.9.6-(b) OSPF (Open Shortest Path First) : link-state algorithm
 AS 전체에 대한 모든 정보를 다 알아야 하며, 모든 노드들이 모든 정보를 공유한다.   
 각각의 노드에서 topology map을 구성할 수 있다.   
 OSPF는 IS-IS routing protocol과 거의 동일하다.   
