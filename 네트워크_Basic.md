@@ -212,7 +212,7 @@ https://www.geeksforgeeks.org/local-area-network-lan-technologies/
 - 사용 가능한 IP주소 개수는 2의 32승 개다.   
 - IP주소는 네트워크 주소(네트워크 ID)와 호스트 주소(호스트 ID)로 구성된다.   
 
-### IP주소의 클래스 구분법
+### 6.1.1 IP주소의 클래스 구분법
 - IP 주소의 앞부분 4비트로 클래스를 식별한다.   
 - 0이면 A 클래스, 10이면 B 클래스, 110이면 C 클래스.   
 - 클래스 식별의 이유: IP에서 네트워크 주소가 어디까지인지 구분하기 위함.   
@@ -229,7 +229,7 @@ E 클래스: 1111.... 차후 사용을 위해 예약됨.
 호스트 ID의 자리에 모든 비트가 0이면 특정 호스트가 아니라 네트워크 자체를 의미한다.   
 호스트 ID의 자리에 모든 비트가 1이면 내부의 모든 호스트를 의미한다.   
 
-### A 클래스
+#### 6.1.1-(a) A 클래스
 앞의 첫 번째 바이트(8비트)가 네트워크 ID를 나타낸다.   
 네트워크 주소의 범위는 0~127.   
 각 네트워크에서 호스트에 할당 가능한 주소의 개수는 ((2^24) – 2) 개.   
@@ -237,33 +237,33 @@ E 클래스: 1111.... 차후 사용을 위해 예약됨.
 전체 IP주소의 50%를 차지한다. (첫 번째 비트가 0으로 시작하는 주소는 A 클래스이기 때문. 나머지는 0으로 시작)   
 A 클래스의 네트워크 ID는 전세계에서 128개 기관만 가질 수 있다.   
 
-### B 클래스
+#### 6.1.1-(b) B 클래스
 네트워크 주소의 범위는 128.0 ~ 191.255   
 전체 IP주소의 25%를 차지한다.   
 각 네트워크에서 호스트에 할당 가능한 주소의 개수는 ((2^16) –2)개   
 
-### C 클래스
+#### 6.1.1-(c) C 클래스
 전체 IP주소의 12.5%를 차지한다.   
 
-### 서브넷
+### 6.1.2 서브넷
 - 서브넷 개념 정의: 하나의 IP 네트워크 주소(A Class 혹은 B Class의 주소)를 네트워크 내부에서 적절히 분배하여 실제로는 여러개의 서로 연결된 지역 네트워크로 사용하는 것.   
 - 필요성: 하나의 네트워크로 수많은 호스트들을 한꺼번에 관리하기는 힘들기 때문에 필요.   
 
-### 서브넷 마스크
+### 6.1.3 서브넷 마스크
 
 클래스에 대한 표준 네트워크 마스크는 아래와 같다.   
 Class A: 255.0.0.0 (11111111 00000000 00000000 00000000)   
 Class B: 255.255.0.0 (11111111 11111111 00000000 00000000)   
 Class C: 255.255.255.0 (11111111 11111111 11111111 00000000)   
    
-#### Class C의 주소에서 서브넷 마스크를 255.255.255.224로 설정했을 경우.   
+#### 6.1.3-example Class C의 주소에서 서브넷 마스크를 255.255.255.224로 설정했을 경우.   
 255.255.255.224 ( = 11111111 11111111 11111111 11100000)   
 앞의 255는 2진수로 110..이므로 Class C이다.   
 Class C는 앞의 3바이트로 네트워크ID를 식별하여 라우팅하고   
 마지막 바이트 앞의 3비트로 서브넷을 구분한다.   
 마지막 바이트의 3비트를 마스킹하는 것은 네트워크 내부의 서브넷을 최대 8개 사용한다는 의미.   
 
-### 사설 주소
+### 6.1.4 사설 주소
 - IP 주소 중 인터넷에서 사용하지 않는 주소.   
 - IP 주소 부족을 해결하는 방안.   
 
@@ -273,32 +273,33 @@ Class C: 192.168.0.0 ~ 192.168.255.255
 
 ## 6.2 data plane과 control plane 개념
 
-## 6.3 Network layer의 역할
+## 6.3 Network layer의 역할과 특징
+### 6.3.1 Network layer의 역할
 - Segment를 호스트에게 전송(Segment에 추가 데이터를 붙여서 Packet으로 전송).   
 - 전송부에서는 segment들을 datagram(혹은 Packet)으로 담아서 전송한다.   
 - 수신부에서는 Segment부분을 Transport layer로 올려줌.   
 - Network layer 프로토콜은 모든 호스트와 라우터에 구현된다.   
 - 라우터는 IP 패킷(datagram)의 헤더를 보고 어느 경로로 보낼지 결정한다.   
 
-## 6.4 Network layer의 특징
-### 두가지 핵심 기능
+### 6.3.2 Network layer의 특징
+#### 두가지 핵심 기능
 - **forwarding**: 라우터에서 다음 라우터에게 패킷을 전달해주는 것.   
 - **routing**: 최적의 경로를 찾는 것.   
 
 패킷 헤더의 dest IP주소를 보고 routing algorithm을 통해 업데이트한 local forwarding table에서   
 적절한 출력링크를 찾아 전송한다.   
 
-### Network layer service models
+### 6.3.3 Network layer service models
 3계층의 Service Model은 Best-effort 방식이다(제대로 전송하려고 최선을 다할 뿐 보장은 하지 않는다). -> 신뢰성을 보장하는 것은 4계층에서 한다.   
 3계층에는 Connection이 필요하지 않다(Connection-less service).   
 
-### Internet network layer 구성요소
+### 6.3.4 Internet network layer 구성요소
 - routing protocol (path selection; RIP OSPF, BGP)   
 - forwarding table   
 - IP protocol   
 - ICMP(Internet Control Message) protocol  (error reporting; router signaling)   
 
-## 6.5 IP datagram format
+## 6.4 IP datagram format
 ![image00002](https://user-images.githubusercontent.com/49184890/122635657-34cde700-d120-11eb-9273-542d510c62f2.PNG)   
 
 - IP datagram의 헤더는 총 20Bytes이다.   
@@ -308,21 +309,21 @@ Class C: 192.168.0.0 ~ 192.168.255.255
 - HDR Checksum: 20바이트인 헤더를 2바이트씩 쪼개어 더하고 1의 보수를 취한 값이다. 라우터를 통과하면서 업데이트된다 (TTL이 계속 감소하여 헤더 값이 바뀐다).    
 - IP address: IPv4는 32bits, IPv6는 128bits이다.   
 
-### (IP fragmentation : IP 단편화, reassembly)
+### 6.4.1 (IP fragmentation : IP 단편화, reassembly)
 
 - 위의 IP datagram format에서 헤더 부분의 { 16-bit ID | flags | fragment offset } 부분이 단편화와 관련있다.   
 - 링크의 종류가 다르면 최대 보낼 수 있는 패킷의 크기도 다르기 때문에 패킷을 쪼개어 보내야 한다.   
 - 수신하게 되는 host는 쪼개어 온 패킷들을 다시 합친다(중간의 라우터들은 합치지 않는다).   
 - MTU(Maximum Transfer Unit): 2계층 Frame의 Payload (즉, IP datagram)의 크기를 지칭.   
 
-### 예를 들어, 4000 Bytes dtagram을 보내야하는데 MTU가 1500 Bytes이면 3개의 datagram들로 나누어 전송.   
+#### 6.4.1-example 4000 Bytes dtagram을 보내야하는데 MTU가 1500 Bytes이면 3개의 datagram들로 나누어 전송.   
 - ID는 모두 같은 값.   
 - fragment flag가 1이면 뒤에 더 이어질 데이터가 있다는 의미이다(마지막 패킷은 0).    
 - offset은 합칠 패킷의 순서를 알기 위한 값이다(8 Bytes단위로 끊음).    
 - length는 헤더(20 Bytes)를 포함한 크기이므로 실제 segment의 크기는 length – 20 Bytes이다.   
 
-## 6.6 IP addressing
-### (IP addressing: CIDR)
+## 6.5 IP addressing
+### 6.5.1 (IP addressing: CIDR)
 > 참고 : https://kim-dragon.tistory.com/9   
 
 CIDR: **Classless** Inter-Domain Routing   
@@ -331,11 +332,11 @@ host를 full로 사용하지 않는 낭비를 줄이기 위해 network주소를 
 
 > TCP/IP 네트워크가 1980년대 인터넷으로 성장함에 따라, 더욱 유동적인 주소 체계가 급속히 필요해졌다. 이는 서브넷, Variable-Length 서브넷, 그리고 마침내 사이더의 개발을 야기하였다. 이전의 클래스 구분이 이제는 무시되므로, 새로운 시스템은 클래스 없는 라우팅이라고 불렸으며, 상대적으로 이전의 시스템은 클래스 있는 라우팅으로 불리게 되었다.
 
-### (IP addresses: how to get one?)
+### 6.5.2 (IP addresses: how to get one?)
 host가 IP 주소를 어떻게 얻을까?   
 -> DHCP: Dynamic Host Configuration Protocol (동적으로 IP주소를 호스트에게 주는 프로토콜)   
 
-### DHCP client-server scenario
+### 6.5.3 DHCP client-server scenario
 DHCP server가 IP를 부여한다.
 1. client는 DHCP서버가 있는지 확인하기 위해 DHCP discover메시지를 broadcast한다. (Dest IP: 255.255.255.255)
 2. DHCP server는 답장으로 IP address(yiaddr)를 하나 제안한다.(DHCP offer)
@@ -345,19 +346,19 @@ DHCP server가 IP를 부여한다.
 > DHCP discover(client->server) -> DHCP offer(server->client) -> DHCP request(client->server) -> DHCP ACK(server->client)   
 
 
-### (DHCP: more than IP addresses)
-- IP주소만 제공하는 것이 아니라 router(Gateway)의 주소에 대한 정보도 알려준다.   
+### 6.5.4 DHCP: more than IP addresses
+- **IP주소만 제공하는 것이 아니라 router(Gateway)의 주소에 대한 정보도 알려준다.**   
 - DNS server의 이름과 ip address를 알려준다.   
 - Subnet mask(network mask)를 제공한다.
 
-### (IP addresses: how to get one?)
+### 6.5.5 IP addresses: how to get one?
 20 bits를 network 주소로 사용하게 된다면 나머지 32-20 = 12 bits는 host 주소로 하용한다.   
 12 bits로 가질 수 있는 host 주소의 개수는 (2^12 – 2) 개다.
 
-### Hierarchical addressing: more specific routes
+### 6.5.6 Hierarchical addressing: more specific routes
 - 라우팅할 때에는 네트워크 주소가 더 길게 매칭이 되는 라우터로 라우팅한다.
 
-## 6.7 NAT: network address translation
+## 6.6 NAT: network address translation
 - 내부 네트워크는 사설 IP를 사용한다. (내부 네트워크는 사설 네트워크로 구성)   
 - 내부 네트워크들과 연결된 외부로 향하는 라우터 하나만 공인 IP를 사용한다.   
 - NAT은 사설 IP를 공인 IP로 바꾸어 통신하도록 도와준다.   
@@ -365,70 +366,71 @@ DHCP server가 IP를 부여한다.
 - Port forwarding을 통해 사설 ip 호스트에서 서버를 운영할 수 있도록 한다.   
 - Port forwarding은 (외부ip:포트 -> 사설ip:포트) 라우팅 경로를 미리 설정하는 것이다.   
 
-## 6.8 ICMP: Internet Control Message Protocol
+## 6.7 ICMP: Internet Control Message Protocol
 - 오류나 request/reply 메시지(Control messages)를 전달하기 위해서 Type과 Code를 이용하여 알린다.   
 - IPv4일 경우에는 정보 오류를 알려주기 위한 기능만을 제공하지만 IPv6에서는 더 많은 기능을 제공한다.   
 - 예를 들어 TTL이 0이 되어 패킷이 drop되면 source에게 (Type:11, Code:0)을 통해 알려준다.   
 
-### (Traceroute and ICMP: ICMP를 이용한 Traceroute 구현)
+### 6.7.1 (Traceroute and ICMP: ICMP를 이용한 Traceroute 구현)
 - 호스트가 TTL이 1인 패킷을 전달하면 first hop 라우터에서 TTL이 0이므로 Control message를 호스트에게 보내준다.   
 - 호스트는 라우터로부터 받은 Control message 응답시간을 보고 전송 delay를 유추한다.   
 - 마찬가지로 호스트에서 TTL이 2, 3, 4, 5...인 패킷을 전달하여 라우터들의 Control message 응답시간을 측정한다.   
 - 마지막에 dest까지 도달하면 접속하려는 port번호가 사용하지 않는 port이므로  dest port unreachable 응답을 받는다.   
 
-## 6.9 IPv6와 IPv4의 공존: Tunneling기법
+## 6.8 IPv6와 IPv4의 공존: Tunneling기법
 - 어떤 라우터는 IPv6로 동작하고 어떤 라우터는 IPv4로 동작한다.   
 - IPv4는 IPv6와 호환성 문제가 있다.   
 - IPv6 Router=> IPv4 Router의 경우: IPv6의 datagram을 통째로 IPv4의 segment에 넣어 새로운 패킷을 전송한다.   
 - IPv4 Router=> IPv6 Router의 경우: IPv4 패킷의 segment를 패킷으로 보낸다(IPv4 데이터를 때어내어 IPv6 패킷만 보냄).   
 - IPv6 라우터는 패킷 내부에 IPv6의 datagram이 들어있는지 판단할 수 있어야 한다(헤더의 upper layer로 판단).   
-- 
-## Routing algorithm classification
+
+## 6.9 Routing
+### 6.9.1 Routing algorithm classification
 Q: global or decentralized information?   
  - global: 그래프에 대한 모든 정보(Vertex, cost)를 알고 구하는 것. => Algorithm: “link state” algorithms
  - decentralized(distributed): 인접한 정보(인접한 Vertex, cost)만 아는 것. => Algorithm: “distance vector” algorithms
    
-### Link state routing algorithm
+### 6.9.2 Link state routing algorithm
 - Dijkstra's algorithm
 - Bellmanford algorithm
-#### Oscillations possible
+#### 6.9.2-possible problem : Oscillations possible
 cost를 traffic으로 볼 때 발생하는 문제점.   
 
-### Distance vector algorithm
+### 6.9.3 Distance vector algorithm
 - Bellmanford **equation** (dynamic programming)
-#### Routing loops
+#### 6.9.3-possible problem : Routing loops
 link cost가 변화하는 경우 발생 가능한 문제점.
-## Inter-AS tasks (eBGP, iBGP)
+### 6.9.4 Inter-AS tasks (eBGP, iBGP)
 - 어떤 네트워크(AS)로 접근할 수 있는지 알아야 한다(**eBGP : external BGP**).   
 - AS 내의 모든 라우터들에게 정보를 공유해야 한다(**iBGP : internal BGP**).   
-## Choosing among multiple ASes
+### 6.9.5 Choosing among multiple ASes
 만약 x에 연결된 AS가 두가지 이상이라면   
 1. x로 접근하기 위해 거쳐야 하는 AS의 수가 적은 길을 택한다.   
 2. 만약 거쳐야 하는 AS 수가 같으면, AS 내부에서 Shortest Path를 찾는다(Hot-potato 방식).   
    
 > Hot potato: 전체적인 cost로 정확하게 판단하는 것이 아니라 intra-AS에서 least-cost를 찾는 것.    
-## Intra-AS Routing
-### RIP (Routing Information Protocol) : distance vector algorithm
-#### RIP : example
+### 6.9.6 Intra-AS Routing
+#### 6.9.6-(a) RIP (Routing Information Protocol) : distance vector algorithm
+#### 6.9.6-(b) RIP : example
 cost를 홉의 수로 판단하여 기록한다.   
 ![image00004](https://user-images.githubusercontent.com/49184890/124355489-69778d80-dc4c-11eb-85bf-2308536bcb25.PNG)   
 D가 A로부터 z로 향하는 홉 수가 더 적은 4홉인 정보를 받으면, 다음과 같이 z로 향하는 정보를 수정한다.   
 ![image00005](https://user-images.githubusercontent.com/49184890/124355495-6bd9e780-dc4c-11eb-9849-395b0b3149b8.PNG)   
-#### RIP : link failure, recovery
+#### 6.9.6-(c) RIP : link failure, recovery
 정보 갱신 여부에 상관없이 주기적으로(30초) 계속 정보를 알려줘야 한다.   
 계속 정보가 넘어오지 않는 경우에는 죽은 것으로 판단하여 테이블을 업데이트 한다.   
 업데이트를 한 정보를 주변 이웃 노드들에게 알려준다.   
-#### RIP : table processing
+#### 6.9.6-(d) RIP : table processing
 RIP routing table은 Application-level의 프로세스인 route-d(daemon)에 의해 관리된다.   
 정보는 UDP로 전달한다.   
 
-### OSPF (Open Shortest Path First) : link-state algorithm
+### 6.9.7 OSPF (Open Shortest Path First) : link-state algorithm
 AS 전체에 대한 모든 정보를 다 알아야 하며, 모든 노드들이 모든 정보를 공유한다.   
 각각의 노드에서 topology map을 구성할 수 있다.   
 OSPF는 IS-IS routing protocol과 거의 동일하다.   
 
-# 7. Transport Layer (4L)
 
+# 7. Transport Layer (4L)
 
 ## Multiplexing / demultiplexing
 - multiplexing(송신부): **many-to-one process.** Transport 헤더를 추가(포트를 적재).   
