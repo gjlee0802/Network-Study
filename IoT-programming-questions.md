@@ -38,43 +38,113 @@
 
 # IoT 프로토콜
 ### 1. 블루투스의 비콘은 무엇인가?
+📌 Beacon 개념:  
 ~~~
+BLE(Bluetooth Low Energy)모드의 블루투스 장치가 
+주위의 블루투스 장치에게 connection 없이 
+advertising(광고) 패킷을 주기적으로 브로드캐스트하는 통신
+~~~
+
+✅ Beacon 특징:  
+~~~
+1. 저전력: BLE 기반으로 배터리 수명이 김
+2. 방향 및 거리 측정 가능: 신호 세기(RSSI)를 활용하여 위치 추정 가능
+3. 단방향 브로드캐스트: 연결 없이 신호를 지속적으로 송출
+4. 다양한 프로토콜 지원
 ~~~
 
 ### 2. 6LowPAN 프로토콜은 Adaptation(절충) 역할을 담당한다. 이것이 필요한 이유와 이를 구현하는 방법이 무엇인지 설명하시오.
+✅ **Adaptation Layer가 필요한 이유:**  
 ~~~
+IPv6는 기본적으로 큰 데이터(MTU 크기: 1280 바이트) 전송을 기대하고 있음
+즉, Network Layer(IP)에서 전송할 수 있는 최대 페이로드 크기 (MTU)가 1280 바이트
+
+그런데 IoT 기기들이 쓰는 IEEE 802.15.4 같은 무선 네트워크는 작은 데이터(Frame 최대 크기: 127 바이트)만 전송 가능함
+즉, Link Layer에서 전송할 수 있는 최대 데이터 단위 (Frame 최대 크기)가 127 바이트
+
+Adaptation은 이 둘 사이 차이를 절충하는 역할 담당함
+~~~
+
+✅ **6LowPAN 주요 기능(구현 방법):**  
+~~~
+1. 헤더 압축 (IPv6 UDP/ICMP header compression)
+    * IPv6의 헤더 40 바이트 -> 헤더를 2 바이트로 줄임
+
+2. 패킷 분할 및 재조립 (Packet Fragmentation & Reassembly)
+    * 1280 바이트 같은 큰 IPv6 패킷은 127바이트 단위로 Fragmentation하여 전송
+    * 수신 측에서는 Reassembly하여 원래 IPv6 패킷으로 복원함
+
+3. 라우팅 (Routing)
+    * 기존의 무거운 IPv6 라우팅 프로토콜 대신, RPL과 같은 경량화된 라우팅 프로토콜 활용
 ~~~
 
 ### 3. MQTT에서 메시지 송수신 방법을 설명하시오(메시지 구분하는 주소 사용 포함).
 ~~~
+Publisher(송신), Subscriber(수신) 간에 메시지 전달이 이루어며,
+둘 사이를 중계하는 Broker가 존재함
+
+메시지를 구분하는 주소로 Topic을 사용하며, 
+Subscriber는 특정 Topic을 구독하고 Publisher는 Topic에 메시지를 발행함
 ~~~
 
 ### 4. MQTT와 HTTP 동작 방식의 차이점을 설명하시오(비동기/동기 중 어느 방식인지 설명 포함).
 ~~~
+MQTT는 비동기식 통신, Broker라는 서버를 중간에 둔 Publisher-Subscriber 구조로 동작
+HTTP는 동기식 통신, 클라이언트가 서버에 요청하면 서버가 응답하는 클라이언트-서버 구조로 동작
 ~~~
 
 ### 5. 전송 프로토콜과 웹인터페이스 사용 여부 관점에서, MQTT와 CoAP 차이점을 설명하시오.
 ~~~
+
 ~~~
 
 ### 6. IoT 플랫폼은 무엇인가?
 ~~~
+센서 네트워크, 네트워크, 클라우드 서버 및 응용까지 연결되어,
+서비스가 가능하게 해주는 통합 시스템(다중 계층)을 의미함
 ~~~
 
 ### 7. IO multiplexing이란 무엇인가?
 ~~~
+하나의 프로세스(쓰레드)안에서 여러 개의 소켓 IO를 처리하는 것
 ~~~
 
 ### 8. [중요] 블루투스의 Classic Mode와 Smart Mode의 차이점은 무엇인가?
 ~~~
+Classic Mode는 지속적인 연결 유지의 방식(continuous connections)인 반면,
+Smart Mode(BLE)는 필요할 때만 연결하는 방식(short burst connections)임
 ~~~
 
 ### 9. [중요] 블루투스의 Notification과 Indication의 차이는 무엇인가?
 ~~~
+둘다 서버가 클라이언트에게 데이터 변경을 알려주는 전송 방식임에서 동일하지만, 
+
+Notification(알림) 전송 방식은 응답(ACK)이 없는 반면,
+Indication(인디케이션) 전송 방식은 응답(ACK)이 필수임
 ~~~
 
 ### 10. 블루투스 장치는 2가지 종류의 장치가 있다. Peripheral과 Central에 대해서 설명하시오.
+BLE 장치는 아래의 두 가지 역할을 가짐:  
 ~~~
+퍼리퍼럴(Peripheral)은 데이터를 광고(Advertising)하는 장치
+센트럴(Central)은 광고 데이터를 스캔(Scanning)하고 연결하는 장치
+
+즉, Central이 Peripheral을 검색하고 연결하여 데이터를 주고받음
+~~~
+
+### 11. GATT란 무엇인가? GATT의 구조에 대해서도 설명하시오.
+GATT 개념:  
+~~~
+BLE에서 장치 간 데이터 교환 방식을 정의하는 프로토콜
+즉, 데이터를 어떻게 표현하고 교환할지 프로파일(Profile)을 정한 규칙
+~~~
+
+GATT 구조:  
+~~~
+데이터를 서비스(Service)와 특성(Characteristic) 형태로 저장 및 전송함
+
+사비스(Service): 여러 개의 특성(Characteristic)을 포함
+특성(Characteristic): 실제 데이터를 포함
 ~~~
 
 # 소켓 프로그래밍
