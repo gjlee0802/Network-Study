@@ -14,14 +14,22 @@
 
 ### 4. TCP 통신을 하고 있는 host B가 host A로 보내는 패킷안에 sequence number: 200, ACK number: 101이 들어있다고 하자. 이 메시지가 host A로 전달하는 의미가 무엇인지를 설명하시오.
 ~~~
+B가 전송하는 패킷은 Sequence Number 200으로 시작하는 데이터가 들어있으며,
+A로부터 Sequence Number 100까지 성공적으로 수신함
 ~~~
 
 ### 5. TCP flow control은 무엇인가?
 ~~~
+수신측 버퍼에서 Overflow가 발생하지 않도록,
+송신측의 전송 속도를 조절하는 기법
+수신 클라이언트가 수행해 주는 제어 기법
 ~~~
 
 ### 6. TCP congestion control은 무엇인가?
 ~~~
+송신 서버의 데이터 전송과 네트워크의 처리 속도 차이로 인한
+네트워크 혼잡을 해결하기 위해 전송 속도를 조절하는 기법
+송신 서버가 수행해 주는 제어 기법
 ~~~
 
 ### 7. (ARP, DHCP, DNS, HTTP, TCP 각 프로토콜 포함) 웹서버와 웹브라우저간의 인터넷 동작에 대한 질문이다. 그림 2를 보면, 어떤 학교 망에서 노트북으로 네트워크로 무선 접속한 뒤, 웹브라우저를 통해 구글 웹서버에 접속하여 웹서비스를 받으려고 한다. 
@@ -34,6 +42,8 @@
 
 ### 8. 패킷 캡슐화(Packet Encapsulation)이란 무엇인가?
 ~~~
+네트워크 상위 계층에서 하위 계층으로 내려가면서 
+필요한 헤더들이 패킷에 추가되는 것을 말함
 ~~~
 
 # IoT 프로토콜
@@ -201,4 +211,44 @@ Stream은 바이트 단위로 처리하는 방식의 TCP 프로토콜 (Connectio
     순서대로 도착하며, 신뢰성이 높음
 Datagram은 패킷 단위로 처리하는 방식의 UDP 프로토콜 (Connectionless)
     순서가 바뀔 수 있으며, 신뢰성이 낮음
+~~~
+
+### 3. Little Endian 시스템에서 아래 코드를 수행했을 때 결과와 htons, htonl 역할을 설명하시오.
+**코드:**    
+~~~
+#include <stdio.h>
+#include <arpa/inet.h>
+
+int main() {
+    unsigned short a = 0x1234;
+    unsigned int b = 0x12345678;
+
+    unsigned short net_a = htons(a);
+    unsigned int net_b = htonl(b);
+
+    printf("htons(0x1234) = 0x%04x\n", net_a);
+    printf("htonl(0x12345678) = 0x%08x\n", net_b);
+
+    return 0;
+}
+~~~
+
+🎯 **수행 결과:**  
+~~~
+htons(0x1234) = 0x3412  
+htonl(0x12345678) = 0x78563412
+~~~
+
+🎯 **htons와 htonl의 역할:**  
+~~~
+Host Byte Order → Network Byte Order (Big Endian)으로 변환해주는 역할
+둘 다 네트워크 전송을 위한 Big Endian 변환이 목적임
+~~~
+
+✅ **htons와 htonl의 차이:** 
+~~~
+htons()는 16비트용(Short), htonl()는 32비트용(Long) 바이트 순서 변환 함수
+
+htonl은 IP 주소 정보를 Big Endian으로 변환할 때 사용,
+htons는 Port 정보를 Big Endian으로 변환할 때 사용
 ~~~
