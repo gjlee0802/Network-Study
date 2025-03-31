@@ -188,8 +188,14 @@ accept 함수 호출 후 클라이언트 소켓이 생성됨
 
 #### 1.4. 클라이언트 코드에서 socket 함수를 call한 뒤, bind 함수 call 없이 바로 connect 함수를 call 한다. 그렇다면 클라이언트 소켓에 클라이언트의 IP 및 Port 주소는 언제 누가 어떻게 할당하는지 설명하시오.
 ~~~
-connect 함수를 호출할 때,
-운영체제가 IP주소는 Host에 할당된 주소, Port는 임의로 할당함
+(1) 언제:
+    connect 함수를 호출할 때,
+
+(2) 누가:
+    운영체제가 
+
+(3) 어떻게:
+    IP주소는 Host에 할당된 주소, Port는 임의로 할당함
 ~~~
 
 **참고:**  
@@ -252,3 +258,45 @@ htons()는 16비트용(Short), htonl()는 32비트용(Long) 바이트 순서 변
 htonl은 IP 주소 정보를 Big Endian으로 변환할 때 사용,
 htons는 Port 정보를 Big Endian으로 변환할 때 사용
 ~~~
+
+### 4. connect 함수가 수행됐다면, 서비스가 동작한다고 할 수 있는가? 이유와 함께 설명하시오.
+~~~
+connect 함수가 수행됐다는 것은 서버의 연결 요청 대기 큐에 등록된 상황만을 의미함
+
+서버의 accept 함수호출을 의미하는 것은 아니므로, connect 함수가 반환했더라도 당장 서비스가 이루어지지 않을 수 있음
+~~~
+
+### 5. 다음 에코 클라이언트 코드의 문제점을 설명하고, 문제점을 수정한 코드를 제시하시오.
+![echo_client_1](./images/echo_client_1.png)  
+✅ **문제점:**  
+~~~
+45 ~ 46번 라인의 코드가 잘못되었음
+
+이 코드에는 read 호출로 서버에서 전송된 문자열을 전체를 읽을 것이라는 가정을 하고 있음
+그러나 실제로는 TCP에는 데이터에 경계가 없으며, 서버가 전송한 문자열의 일부만 읽힐 수 있음
+~~~
+✅ **해결책:**
+~~~
+write 함수를 통해서 전송한 데이터 길이(str_len)만큼 읽어 들이기 위한 반복문 삽입이 필요함
+~~~
+
+🎯 **수정 코드:**  
+45 라인부터 57 라인까지 다음 코드로 대체  
+~~~
+    # 전송한 데이터 길이만큼 읽도록 하기 위해, 전송한 데이터 길이를 strlen 변수에 저장
+    strlen = write(sock, message, strlen(message));
+    while(recv_len < str_len)
+    {
+        recv_cnt = read(sock, message, BUF_SIZE=-1);
+
+        # read에 대한 에러 핸들링 필요
+        if (recv_cnt == -1) 
+            error_handling("recv error");
+        
+        # 수신한 길이에 read로 읽은 크기 누적
+        recv_len += recv_cnt;
+    }
+    message[str_len]=0;
+    printf("Message from server:%s", message);
+~~~
+
