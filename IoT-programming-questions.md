@@ -2,14 +2,26 @@
 
 ### 1. IoT란 무엇인가?
 ~~~
+사람, 사물, 컴퓨터 등이 연결되어 정보를 생성, 수집, 활용하는 초연결 인터넷
 ~~~
 
-### 2. Internet Protocol Stack을 구성하는 네트워크 5계층을 설명하시오.
+### 2. Internet Protocol Stack을 구성하는 네트워크 5계층(Physical Layer 외의 계층)을 설명하시오.
 ~~~
+5계층 Application Layer: HTTP
+4계층 Transport Layer: TCP
+3계층 Network Layer: IP
+2계층 Link Layer: Ethernet
 ~~~
 
 ### 3. frame, packet, segment, datagram 차이점 (최상위 계층 메시지 M을 기준으로 역순서로 내려오면서 차이점을 설명하세요)
 ~~~
+최상위 계층(Application Layer)에 메시지 M에
+
+1) Transport Layer의 헤더가 추가됨 (SRC/DST port 번호 포함)
+    * TCP 헤더: Segment
+    * UDP 헤더: Datagram
+2) 1에 Network Layer의 헤더가 추가됨 (SRC/DST IP 주소 포함): Packet
+3) 2에 Link Layer의 헤더가 추가됨 (SRC/DST MAC 주소 포함): Frame
 ~~~
 
 ### 4. TCP 통신을 하고 있는 host B가 host A로 보내는 패킷안에 sequence number: 200, ACK number: 101이 들어있다고 하자. 이 메시지가 host A로 전달하는 의미가 무엇인지를 설명하시오.
@@ -37,7 +49,60 @@ A로부터 Sequence Number 100까지 성공적으로 수신함
 ![network-fig](./images/network-fig.png)
 
 #### 7.1. 노트북를 위한 동적 IP 할당부터, 웹 서비스 요청에서 웹서버 응답을 받을 때까지 진행되는 과정을 링크 계층부터 응용계층까지 포함하여 단계별로 설명하시오. 각 과정에서 프로토콜 동작과정을 구체적으로 설명하시오(ARP, DHCP, DNS, HTTP, TCP 동작설명 포함).
+
+참고사항:  
+* Application Layer: DHCP, DNS, HTTP
+* Transport Layer: TCP
+* Network Layer: IP
+* Link Layer: ARP
+
+
+1️⃣ **Step 1.** **DHCP** 프로토콜: 동적 IP 할당  
 ~~~
+노트북이 학교 네트워크에 연결되면, DHCP 서버로부터 IP 주소를 자동으로 받아오게 됨
+이를 위해 노트북은 DHCP 요청 메시지에 UDP 헤더를 붙이고, 이 메시지를 이더넷 프레임으로 감싼 뒤 LAN에 브로드캐스팅함
+
+DHCP 서버는 이 이더넷 프레임을 수신한 후, 
+그 안에서 IP 패킷과 UDP 데이터그램을 추출해서 DHCP 요청을 확인
+요청을 처리한 서버는 응답으로 ACK 메시지를 보내며, 
+클라이언트에게 다음 정보를 전달함:
+    * 할당된 IP 주소
+    * 기본 게이트웨이(첫 번째 라우터)의 주소
+    * DNS 서버의 이름과 IP 주소
+~~~
+
+2️⃣ **Step 2.** 도메인 www.google.com의 **IP주소를 DNS서버에 요청하여 받음** (**ARP, DNS**)  
+~~~
+노트북 내 캐시를 검색하여 만일 해당 IP주소가 있다면, 그 IP주소를 사용
+그렇지 않을 경우 DNS 서버에 요청
+
+1. 노트북의 웹브라우저에서 DNS 쿼리(DNS query)를 생성하면, 이 쿼리를 DNS 서버로 보내야 함
+그런데 인터넷으로 나가기 위해서는 먼저 기본 게이트웨이(First Router)로 이 패킷을 전달해야 함
+
+2. 노트북과 라우터는 같은 서브넷(subnet) 안에 있어서, 데이터를 전송할 때 MAC 주소를 사용해야 함
+그러기 위해 노트북은 먼저 라우터의 MAC 주소를 알아야 하고, 이를 위해 ARP 프로토콜을 사용
+노트북은 "이 IP 주소를 가진 기기 누구야?" 라는 ARP 요청 메시지를 이더넷 프레임으로 만들어 LAN에 브로드캐스팅
+
+이 요청을 받은 라우터가 자신이 그 IP를 가지고 있다고 응답하면서, 자신의 MAC 주소를 노트북에 알려줌
+
+3. 이제 MAC 주소를 알게 된 노트북은, DNS 쿼리를 담은 패킷을 라우터에 보냄
+DNS 쿼리는 UDP 데이터그램에 담겨 있고, 이 전체 메시지는 다시 이더넷 프레임으로 감싸져 MAC 주소를 이용해 라우터로 전송함
+
+4. 라우터는 DNS 서버까지 이 DNS 쿼리 패킷을 전달함
+DNS 서버는 이 요청을 처리해서 웹 서버의 IP 주소를 찾아내고, 응답을 통해 노트북에 IP주소를 알려줌
+~~~
+
+3️⃣ **Step 3.** HTTP 요청을 웹서버에 보내기 전, **TCP connection을 맺기 위해 3 way handshaking**을 함  
+~~~
+3 way handshaking 과정:
+브라우저가 웹서버에 SYN 패킷을 전송, 웹서버가 SYN + ACK로 응답, 브라우저가 ACK로 응답하여 TCP connection이 맺어짐
+~~~
+
+4️⃣ **Step 4.** **HTTP 요청** 및 HTTP 응답 수신  
+~~~
+HTTP 메소드가 명시된 HTTP 요청을 웹서버에 전달되면, 
+웹서버는 브라우저에 HTTP 응답(응답 메시지 + body)을 전송
+브라우저는 화면에 응답 결과를 보여줌
 ~~~
 
 ### 8. 패킷 캡슐화(Packet Encapsulation)이란 무엇인가?
@@ -182,7 +247,7 @@ accept 함수 호출 후 클라이언트 소켓이 생성됨
 #### 1.3. 서버에서 연결요청 대기실(큐)을 운영하는데 (1) 이게 생성되는 순간은 언제인가? (2) 이 대기실에 연결요청이 추가되는 순간은 언제인가? (3) 대기중인 연결요청이 수락되는 시점은 언제인가?
 ~~~
 (1) listen 함수 호출시 연결요청 대기 큐가 생성됨
-(2) connection 함수 호출시 연결요청이 추가됨
+(2) connect 함수 호출시 연결요청이 추가됨
 (3) accept 함수 호출시 연결요청이 수락됨
 ~~~
 
