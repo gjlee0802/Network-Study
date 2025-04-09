@@ -446,3 +446,93 @@ HW2의 변형, 아래 조건을 만족할 것:
     return 0;
 ~~~
 
+### 7. 아래 소켓 옵션의 의미를 구체적으로 설명하시오(세팅 결과에 따라 TCP 동작이 어떻게 바뀌는지 설명). [24 Spring Mid]
+~~~
+int opt_val=1;
+setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (void*)&opt_val, sizeof(opt_val));
+~~~
+
+**소켓 옵션의 의미:**  
+~~~
+(1) TCP_NODELAY를 1로 활성화하면:
+Nagle 알고리즘 적용을 멈추게 함.
+
+(2) Nagle 알고리즘 개념:
+데이터가 MSS만큼 쌓이거나, 이전 데이터에 대한 ACK 받았을 때
+데이터 전송함으로써 네트워크 트래픽 양을 제어함 (네트워크 혼잡 방지)
+
+(3) Nagle 알고리즘 적용을 멈추게 하면:
+작은 크기의 데이터라 할지라도 바로바로 전송하여 응답시간이 빨라짐
+~~~
+
+### 8. 서버 프로그램 종료 후 재실행 시 bind 에러가 발생하는 이유를 설명하시오(Time-wait).
+**발생 이유:**
+~~~
+TCP에서 연결 종료를 목적으로 하는 Four-way handshaking 과정의 
+마지막 ACK를 전송하는 호스트에서 ACK가 소멸되는 상황을 대비하여 Time-wait을 거침
+
+이 Time-wait을 위해 커널은 지역주소(IP, Port 정보)를 점유하고 있음 
+Time-wait 상태에 있는 Port의 재할당이 가능하도록 SO_REUSEADDR 소켓 옵션을 설정해야 함
+~~~
+
+`SO_REUSEADDR` 소켓 옵션 사용:  
+~~~
+optlen=sizeof(option);
+option=TRUE;
+setsockopt(serv_sock, SOL_SOCKET, SO_REUSEADDR, (void*)&option, optlen);
+~~~
+
+### 9. 그림 1과 2는 소켓프로그램 예제이다. [22 Fall Mid]
+![22-fall-mid-1](./images/22-fall-mid-1.png)  
+![22-fall-mid-2](./images/22-fall-mid-2.png)  
+
+### 9.1. 그림 1에서 socket(26번), bind(35번), listen(38번), accept(45번), close(57번)의 기능을 각각 1-2줄로 설명하시오. 그림 2에서 connect(32번) 기능을 1-2줄로 설명하시오. 
+~~~
+socket: 프로토콜 관련 정보를 받아 소켓을 생성하고 소켓 fd를 리턴
+bind: 서버 IP, port의 주소 정보를 소켓에 할당
+listen: 해당 소켓을 연결요청 가능한 상태로 변경하고, 연결요청 대기큐를 만들어 줌
+accept: 클라이언트 연결요청을 수락하고 해당 클라이언트와 데이터 송수신을 담당할 클라이언트용 소켓 생성
+close: 통신이 모두 끝나서 소켓 소멸
+connect: 클라이언트에서 서버에게 연결요청
+~~~
+
+### 9.2. 그림 1 listen 함수(38번), accept 함수(45번), 그림 2 connect 함수들 사이 종속관계를 설명하시오. (예를 들어, connect 함수 수행 전 listen 함수, accept 함수 둘 다 반드시 수행되어야 하는가?)
+~~~
+1. listen 함수는 반드시 connect 함수보다 먼저 호출되어야 함
+2. accept 함수는 connect 함수 수행 전 혹은 후에 수행해도 됨
+    (연결 요청은 커널 큐에 저장되므로, 순서 유연함)
+    * 서버가 먼저 accept() 호출: 서버는 블로킹 상태로 클라이언트를 기다림
+    * 클라이언트가 먼저 connect() 호출: 커널이 연결요청을 대기큐에 저장해둠
+~~~
+
+### 9.3. 그림 1의 32번줄, 33번줄 htonl, htons 함수의 기능은 무엇인가?
+`htonl` 함수 기능:  
+~~~
+"long type 호스트 바이트 순서"인 주소를 
+"long type 네트워크 바이트 순서"인 주소로 변환함
+~~~
+
+`htons` 함수 기능:  
+~~~
+"short type 호스트 바이트 순서"인 주소를 
+"short type 네트워크 바이트 순서"인 주소로 변환함
+~~~
+
+### 9.4. 그림 1의 32번줄 argument인 INADDR_ANY의 의미는? (host IP를 argument로 입력한 것과 차이점을 설명)
+~~~
+하나의 Host가 여러 NIC를 사용하여 여러 IP 주소를 사용할 수 있음
+
+1. INADDR_ANY는 Host의 여러 IP 중 어떤 IP로 오더라도 데이터 수신이 가능하도록 함
+2. 특정 Host IP를 지정하면 해당 IP로만 데이터 수신 가능
+~~~
+
+### 9.5. 그림 1의 TCP 서버 프로그램을 UDP 서버 프로그램으로 바꾸려 한다. 소켓 함수들 관점에서 바뀌는 내용을 설명하시오.
+~~~
+1. socket 함수의 argument를 SOCK_STREAM에서 SOCK_DGRAM으로 변경
+
+2. listen 및 accept 함수 제거
+
+3. read 함수를 recvfrom 함수로 교체
+
+4. write 함수를 sendto 함수로 교체
+~~~
