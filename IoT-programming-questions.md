@@ -128,7 +128,7 @@ advertising(광고) 패킷을 주기적으로 브로드캐스트하는 통신
 4. 다양한 프로토콜 지원
 ~~~
 
-### 2. 6LowPAN 프로토콜은 Adaptation(절충) 역할을 담당한다. 이것이 필요한 이유와 이를 구현하는 방법이 무엇인지 설명하시오. [24 Spring Mid]
+### 2. 6LowPAN 프로토콜은 Adaptation(절충) 역할을 담당한다. 이것이 필요한 이유와 이를 구현하는 방법(주요 기능)이 무엇인지 설명하시오. [24 Spring Mid, 22 Fall Mid]
 ✅ **Adaptation Layer가 필요한 이유:**  
 ~~~
 IPv6는 기본적으로 큰 데이터(MTU 크기: 1280 바이트) 전송을 기대하고 있음
@@ -168,7 +168,14 @@ MQTT는 비동기식 통신, Broker라는 서버를 중간에 둔 Publisher-Subs
 HTTP는 동기식 통신, 클라이언트가 서버에 요청하면 서버가 응답하는 클라이언트-서버 구조로 동작
 ~~~
 
-### 5. 전송 프로토콜과 웹인터페이스 사용 여부 관점에서, MQTT와 CoAP 차이점을 설명하시오. [24 Spring Mid]
+### 5. MQTT에서는 client와 서버 사이 메시지 전송함에 있어서 기본적인 QoS 기능을 지원한다. QoS 3 종류(0, 1, 2)를 설명하시오. [22 Fall Mid]
+~~~
+0: 많아야 한번 전송 (Best Effort, 수신보장 못함)
+1: 최소 한번 (ACK가 없으면 재전송, 수신보장)
+2: 정확하게 한번 전송 (정교한 메시지 교환, 수신보장)
+~~~
+
+### 6. 전송 프로토콜과 웹인터페이스 사용 여부 관점에서, MQTT와 CoAP 차이점을 설명하시오. [24 Spring Mid]
 ~~~
 전송 프로토콜 차이:
     * MQTT: TCP 기반
@@ -179,24 +186,42 @@ HTTP는 동기식 통신, 클라이언트가 서버에 요청하면 서버가 �
     * CoAP: 사용함
 ~~~
 
-### 6. IoT 플랫폼은 무엇인가?
+### 7. IoT 플랫폼은 무엇인가?
 ~~~
 센서 네트워크, 네트워크, 클라우드 서버 및 응용까지 연결되어,
 서비스가 가능하게 해주는 통합 시스템(다중 계층)을 의미함
 ~~~
 
-### 7. IO multiplexing이란 무엇인가?
+### 8. IO multiplexing이란 무엇인가?
 ~~~
 하나의 프로세스(쓰레드)안에서 여러 개의 소켓 IO를 처리하는 것
 ~~~
 
-### 8. [중요] 블루투스의 Classic Mode와 Smart Mode의 차이점은 무엇인가?
+### 9. [중요] 블루투스의 Classic Mode와 Smart Mode의 차이점은 무엇인가(에너지 절약, 연결유형, 응용의 관점에서 설명)? [22 Fall Mid]
+1. 에너지 절약 관점
 ~~~
-Classic Mode는 지속적인 연결 유지의 방식(continuous connections)인 반면,
-Smart Mode(BLE)는 필요할 때만 연결하는 방식(short burst connections)임
+Smart Mode는 저전력으로 동작함
 ~~~
 
-### 9. [중요] 블루투스의 Notification과 Indication의 차이는 무엇인가?
+2. 연결유형 관점:  
+~~~
+Smart Mode는 
+    - 1:N 또는 N:M 연결인 반면,
+Classic Mode는 
+    - 1:1 연결임
+~~~
+
+3. 응용 관점:  
+~~~
+Classic Mode는 
+    - 지속적인 연결 유지의 방식(continuous connections)임
+    - 오디오 스트리밍, 데이터 스트리밍에 응용
+Smart Mode(BLE)는 
+    - 필요할 때만 연결하는 방식(short burst connections)임
+    - Beacon, 센서 네트워크에 응용
+~~~
+
+### 10. [중요] 블루투스의 Notification과 Indication의 차이는 무엇인가?
 ~~~
 둘다 서버가 클라이언트에게 데이터 변경을 알려주는 전송 방식임에서 동일하지만, 
 
@@ -204,7 +229,7 @@ Notification(알림) 전송 방식은 응답(ACK)이 없는 반면,
 Indication(인디케이션) 전송 방식은 응답(ACK)이 필수임
 ~~~
 
-### 10. 블루투스 장치는 2가지 종류의 장치가 있다. Peripheral과 Central에 대해서 설명하시오.
+### 11. 블루투스 장치는 2가지 종류의 장치가 있다. Peripheral과 Central에 대해서 설명하시오.
 BLE 장치는 아래의 두 가지 역할을 가짐:  
 ~~~
 퍼리퍼럴(Peripheral)은 데이터를 광고(Advertising)하는 장치
@@ -213,7 +238,7 @@ BLE 장치는 아래의 두 가지 역할을 가짐:
 즉, Central이 Peripheral을 검색하고 연결하여 데이터를 주고받음
 ~~~
 
-### 11. GATT란 무엇인가? GATT의 구조에 대해서도 설명하시오.
+### 12. GATT란 무엇인가? GATT의 구조에 대해서도 설명하시오.
 📌 GATT 개념:  
 ~~~
 BLE에서 장치 간 데이터 교환 방식을 정의하는 프로토콜
